@@ -1,20 +1,45 @@
-// CS103-AS2.cpp : This file contains the 'main' function. Program execution begins and ends there.
-//
+// CS103-AS2.cpp : School Lunch Ordering System
 
 #include <iostream>
+#include <iomanip>
 
-int main()
-{
-    std::cout << "First Hello World!\n";
+int main() {
+    char userChoice;
+    const int consoleWidth = 80; // Assuming console is 80 characters wide
+
+    std::string welcomeText = "Welcome to our School Lunch Ordering System!";
+    int padding = (consoleWidth - welcomeText.length()) / 2;
+    std::cout << std::setw(padding) << "" << welcomeText << std::endl;
+
+    std::string roleText = "Please select your role:";
+    padding = (consoleWidth - roleText.length()) / 2;
+    std::cout << std::setw(padding) << "" << roleText << std::endl;
+
+    std::string studentText = "Press 'S' for Student";
+    padding = (consoleWidth - studentText.length()) / 2;
+    std::cout << std::setw(padding) << "" << studentText << std::endl;
+
+    std::string adminText = "Press 'A' for Administrator";
+    padding = (consoleWidth - adminText.length()) / 2;
+    std::cout << std::setw(padding) << "" << adminText << std::endl;
+
+    std::cin >> userChoice;
+
+    switch (userChoice) {
+    case 'S':
+    case 's':
+        std::cout << "Student selected" << std::endl;
+        // Call the function that handles Student's tasks
+        break;
+    case 'A':
+    case 'a':
+        std::cout << "Administrator selected" << std::endl;
+        // Call the function that handles Administrator's tasks
+        break;
+    default:
+        std::cout << "Invalid selection!" << std::endl;
+        break;
+    }
+
+    return 0;
 }
-
-// Run program: Ctrl + F5 or Debug > Start Without Debugging menu
-// Debug program: F5 or Debug > Start Debugging menu
-
-// Tips for Getting Started: 
-//   1. Use the Solution Explorer window to add/manage files
-//   2. Use the Team Explorer window to connect to source control
-//   3. Use the Output window to see build output and other messages
-//   4. Use the Error List window to view errors
-//   5. Go to Project > Add New Item to create new code files, or Project > Add Existing Item to add existing code files to the project
-//   6. In the future, to open this project again, go to File > Open > Project and select the .sln file
