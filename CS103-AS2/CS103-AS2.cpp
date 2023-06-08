@@ -15,7 +15,7 @@ int main() {
     padding = (consoleWidth - roleText.length()) / 2;
     std::cout << std::setw(padding) << "" << roleText << std::endl;
 
-    std::string studentText = "Press 'S' for Student";
+    std::string studentText = "Press 'k' for Student";
     padding = (consoleWidth - studentText.length()) / 2;
     std::cout << std::setw(padding) << "" << studentText << std::endl;
 
