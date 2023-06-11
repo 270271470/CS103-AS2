@@ -1,45 +1,23 @@
 // CS103-AS2.cpp : School Lunch Ordering System
 
-#include <iostream>
-#include <iomanip>
+// Include our header files for the different components we are creating.
+#include "UserDatabase.h"
+#include "LoginHandler.h"
+#include "MenuHandler.h"
 
 int main() {
-    char userChoice;
-    const int consoleWidth = 80; // Assuming console is 80 characters wide
 
-    std::string welcomeText = "Welcome to our School Lunch Ordering System!";
-    int padding = (consoleWidth - welcomeText.length()) / 2;
-    std::cout << std::setw(padding) << "" << welcomeText << std::endl;
+    // Create a Database object with the filename of the CSV file that holds the user data.
+    UserDatabase db("users.csv");
 
-    std::string roleText = "Please select your role:";
-    padding = (consoleWidth - roleText.length()) / 2;
-    std::cout << std::setw(padding) << "" << roleText << std::endl;
+    // Create a LoginHandler object with this Database
+    LoginHandler lh(db);
 
-    std::string studentText = "Press 'S' for Student";
-    padding = (consoleWidth - studentText.length()) / 2;
-    std::cout << std::setw(padding) << "" << studentText << std::endl;
+    // Create a MenuHandler object with the above LoginHandler.
+    MenuHandler mh(lh);
 
-    std::string adminText = "Press 'A' for Administrator";
-    padding = (consoleWidth - adminText.length()) / 2;
-    std::cout << std::setw(padding) << "" << adminText << std::endl;
-
-    std::cin >> userChoice;
-
-    switch (userChoice) {
-    case 'S':
-    case 's':
-        std::cout << "Student selected" << std::endl;
-        // Call the function that handles Student's tasks
-        break;
-    case 'A':
-    case 'a':
-        std::cout << "Administrator selected" << std::endl;
-        // Call the function that handles Administrator's tasks
-        break;
-    default:
-        std::cout << "Invalid selection!" << std::endl;
-        break;
-    }
+    // Call the start() function of MenuHandler to start the menu.
+    mh.start();
 
     return 0;
 }
