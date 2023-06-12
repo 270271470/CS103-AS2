@@ -22,8 +22,8 @@ void displayMainMenu() {
 
         cout << "Please choose an option:\n";
         cout << "1. Login\n";
-        cout << "2. Register\n";
-        cout << "3. I'm an admin\n";
+        cout << "2. Register as New User\n";
+        cout << "3. Administrator Login\n";
         cout << "4. Exit\n";
 
         cout << "Your choice: ";
