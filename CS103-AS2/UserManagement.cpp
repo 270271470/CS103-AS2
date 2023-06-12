@@ -35,7 +35,7 @@ void registerUser() {
     cout << "Are you a Teacher or Student?: ";
     cin >> newUser.role;
 
-    ofstream file("database.csv", ios_base::app);
+    ofstream file("userdb.csv", ios_base::app);
     file << newUser.firstName << ","
         << newUser.lastName << ","
         << newUser.id << ","
@@ -50,7 +50,7 @@ bool loginUser() {
     cout << "Enter Password: ";
     cin >> password;
 
-    ifstream file("database.csv");
+    ifstream file("userdb.csv");
     string line;
     while (getline(file, line)) {
         vector<string> fields = split(line, ',');
@@ -125,7 +125,7 @@ void orderLunch(const User& user) {
         return;
     }
 
-    ofstream file("orders.csv", ios::app);
+    ofstream file("orderdb.csv", ios::app);
     file << user.id << ',' << user.firstName << ',' << user.lastName << ',' << user.role << ',' << item << ',' << price << '\n';
     cout << "Order placed for " << item << " for " << price << " dollars.\n";
 }
