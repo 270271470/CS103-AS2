@@ -20,7 +20,7 @@ bool adminUser() {
     cout << "Enter Password: ";
     cin >> password;
 
-    ifstream file("database.csv");
+    ifstream file("userdb.csv");
     string line;
     while (getline(file, line)) {
         vector<string> fields = split(line, ',');
@@ -33,7 +33,7 @@ bool adminUser() {
 }
 
 void viewRecords() {
-    ifstream file("database.csv");
+    ifstream file("userdb.csv");
     string line;
     while (getline(file, line)) {
         cout << line << "\n";
@@ -50,7 +50,7 @@ void modifyUser() {
     cin >> id;
 
     vector<User> users;
-    ifstream file("database.csv");
+    ifstream file("userdb.csv");
     string line;
     while (getline(file, line)) {
         vector<string> fields = split(line, ',');
@@ -73,7 +73,7 @@ void modifyUser() {
         }
     }
 
-    ofstream fileOut("database.csv");
+    ofstream fileOut("userdb.csv");
     for (const auto& user : users) {
         fileOut << user.firstName << ","
             << user.lastName << ","
@@ -89,7 +89,7 @@ void deleteUser() {
     cin >> id;
 
     vector<User> users;
-    ifstream file("database.csv");
+    ifstream file("userdb.csv");
     string line;
     while (getline(file, line)) {
         vector<string> fields = split(line, ',');
@@ -99,7 +99,7 @@ void deleteUser() {
         }
     }
 
-    ofstream fileOut("database.csv");
+    ofstream fileOut("userdb.csv");
     for (const auto& user : users) {
         fileOut << user.firstName << ","
             << user.lastName << ","
