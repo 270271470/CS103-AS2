@@ -2,6 +2,7 @@
 #include <fstream>
 #include <vector>
 #include "UserManagement.h"
+#include "AdminManagement.h"
 #include "FileOps.h"
 
 using namespace std;
@@ -43,146 +44,8 @@ void registerUser() {
 }
 
 bool loginUser() {
-    std::string id, password;
-    std::cout << "Enter ID Number: ";
-    std::cin >> id;
-    std::cout << "Enter Password: ";
-    std::cin >> password;
-
-    std::ifstream file("database.csv");
-    std::string line;
-    while (std::getline(file, line)) {
-        std::vector<std::string> fields = split(line, ',');
-        if (fields[2] == id && fields[3] == password) {
-            std::cout << "Login successful!\n";
-            User user{ fields[0], fields[1], fields[2], fields[3], fields[4] };
-            std::system(CLEAR);
-            if (user.role == "Admin") {
-                adminMenu();
-            }
-            else {
-                userMenu(user);
-            }
-            return true;
-        }
-    }
-    return false;
-}
-
-void viewRecords() {
-    ifstream file("database.csv");
-    string line;
-    while (getline(file, line)) {
-        cout << line << "\n";
-    }
-}
-
-void addUser() {
-    registerUser();
-}
-
-void modifyUser() {
-    string id;
-    cout << "Enter the ID of the user to modify: ";
-    cin >> id;
-
-    vector<User> users;
-    ifstream file("database.csv");
-    string line;
-    while (getline(file, line)) {
-        vector<string> fields = split(line, ',');
-        if (fields[2] == id) {
-            User user;
-            cout << "Enter new First Name (current is " << fields[0] << "): ";
-            cin >> user.firstName;
-            cout << "Enter new Last Name (current is " << fields[1] << "): ";
-            cin >> user.lastName;
-            user.id = id;
-            cout << "Enter new Password (current is " << fields[3] << "): ";
-            cin >> user.password;
-            cout << "Enter new role (current is " << fields[4] << "): ";
-            cin >> user.role;
-            users.push_back(user);
-        }
-        else {
-            User user = { fields[0], fields[1], fields[2], fields[3], fields[4] };
-            users.push_back(user);
-        }
-    }
-
-    ofstream fileOut("database.csv");
-    for (const auto& user : users) {
-        fileOut << user.firstName << ","
-            << user.lastName << ","
-            << user.id << ","
-            << user.password << ","
-            << user.role << "\n";
-    }
-}
-
-void deleteUser() {
-    string id;
-    cout << "Enter the ID of the user to delete: ";
-    cin >> id;
-
-    vector<User> users;
-    ifstream file("database.csv");
-    string line;
-    while (getline(file, line)) {
-        vector<string> fields = split(line, ',');
-        if (fields[2] != id) {
-            User user = { fields[0], fields[1], fields[2], fields[3], fields[4] };
-            users.push_back(user);
-        }
-    }
-
-    ofstream fileOut("database.csv");
-    for (const auto& user : users) {
-        fileOut << user.firstName << ","
-            << user.lastName << ","
-            << user.id << ","
-            << user.password << ","
-            << user.role << "\n";
-    }
-}
-
-void adminMenu() {
-    int choice;
-    do {
-        cout << "\nAdmin Menu:\n";
-        cout << "1. View all records\n";
-        cout << "2. Add a new user\n";
-        cout << "3. Modify an existing user\n";
-        cout << "4. Delete a user\n";
-        cout << "5. Exit\n";
-        cin >> choice;
-
-        switch (choice) {
-        case 1:
-            viewRecords();
-            break;
-        case 2:
-            addUser();
-            break;
-        case 3:
-            modifyUser();
-            break;
-        case 4:
-            deleteUser();
-            break;
-        case 5:
-            cout << "Exiting the admin menu...\n";
-            break;
-        default:
-            cout << "Invalid option!\n";
-            break;
-        }
-    } while (choice != 5);
-}
-
-bool adminUser() {
     string id, password;
-    cout << "Enter Admin ID Number: ";
+    cout << "Enter ID Number: ";
     cin >> id;
     cout << "Enter Password: ";
     cin >> password;
@@ -191,8 +54,16 @@ bool adminUser() {
     string line;
     while (getline(file, line)) {
         vector<string> fields = split(line, ',');
-        if (fields[2] == id && fields[3] == password && fields[4] == "Admin") {
-            adminMenu();
+        if (fields[2] == id && fields[3] == password) {
+            cout << "Login successful!\n";
+            User user{ fields[0], fields[1], fields[2], fields[3], fields[4] };
+            system(CLEAR);
+            if (user.role == "Admin") {
+                adminMenu();
+            }
+            else {
+                userMenu(user);
+            }
             return true;
         }
     }

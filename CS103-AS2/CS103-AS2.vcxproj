@@ -139,12 +139,14 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="AdminManagement.cpp" />
     <ClCompile Include="CS103-AS2.cpp" />
     <ClCompile Include="MainMenu.cpp" />
     <ClCompile Include="UserManagement.cpp" />
     <ClCompile Include="FileOps.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="AdminManagement.h" />
     <ClInclude Include="MainMenu.h" />
     <ClInclude Include="UserManagement.h" />
     <ClInclude Include="FileOps.h" />
