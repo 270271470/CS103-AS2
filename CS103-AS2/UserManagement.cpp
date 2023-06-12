@@ -43,18 +43,26 @@ void registerUser() {
 }
 
 bool loginUser() {
-    string id, password;
-    cout << "Enter ID Number: ";
-    cin >> id;
-    cout << "Enter Password: ";
-    cin >> password;
+    std::string id, password;
+    std::cout << "Enter ID Number: ";
+    std::cin >> id;
+    std::cout << "Enter Password: ";
+    std::cin >> password;
 
-    ifstream file("database.csv");
-    string line;
-    while (getline(file, line)) {
-        vector<string> fields = split(line, ',');
+    std::ifstream file("database.csv");
+    std::string line;
+    while (std::getline(file, line)) {
+        std::vector<std::string> fields = split(line, ',');
         if (fields[2] == id && fields[3] == password) {
-            cout << "Login successful!\n";
+            std::cout << "Login successful!\n";
+            User user{ fields[0], fields[1], fields[2], fields[3], fields[4] };
+            std::system(CLEAR);
+            if (user.role == "Admin") {
+                adminMenu();
+            }
+            else {
+                userMenu(user);
+            }
             return true;
         }
     }
@@ -189,4 +197,64 @@ bool adminUser() {
         }
     }
     return false;
+}
+
+void userMenu(const User& user) {
+    int choice;
+    do {
+        cout << "Welcome, " << user.firstName << "! Please choose an option:\n";
+        cout << "1. Order Lunch\n";
+        cout << "2. View Bill\n";
+        cout << "3. Update Payment Method\n";
+        cout << "4. Exit\n";
+
+        cin >> choice;
+
+        switch (choice) {
+        case 1:
+            orderLunch(user);
+            break;
+            // I haven't done the View Bill or Payment Method Yet, sorry John :)
+        case 4:
+            cout << "Exiting...\n";
+            break;
+        default:
+            cout << "Invalid option!\n";
+            break;
+        }
+    } while (choice != 4);
+}
+
+void orderLunch(const User& user) {
+    cout << "Please choose an option:\n";
+    cout << "1. Hamburger ($5)\n";
+    cout << "2. Hotdog ($3)\n";
+    cout << "3. Pizza ($7)\n";
+
+    int choice;
+    cin >> choice;
+
+    string item;
+    int price;
+    switch (choice) {
+    case 1:
+        item = "Hamburger";
+        price = 5;
+        break;
+    case 2:
+        item = "Hotdog";
+        price = 3;
+        break;
+    case 3:
+        item = "Pizza";
+        price = 7;
+        break;
+    default:
+        cout << "Invalid option!\n";
+        return;
+    }
+
+    ofstream file("orders.csv", ios::app);
+    file << user.id << ',' << user.firstName << ',' << user.lastName << ',' << user.role << ',' << item << ',' << price << '\n';
+    cout << "Order placed for " << item << " for " << price << " dollars.\n";
 }

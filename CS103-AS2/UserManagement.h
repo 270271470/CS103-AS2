@@ -16,3 +16,5 @@ bool loginUser();
 void registerUser();
 bool adminUser();
 void adminMenu();
+void userMenu(const User& user);
+void orderLunch(const User& user);
