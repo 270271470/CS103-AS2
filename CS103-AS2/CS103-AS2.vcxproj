@@ -140,6 +140,14 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="CS103-AS2.cpp" />
+    <ClCompile Include="MainMenu.cpp" />
+    <ClCompile Include="UserManagement.cpp" />
+    <ClCompile Include="FileOps.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="MainMenu.h" />
+    <ClInclude Include="UserManagement.h" />
+    <ClInclude Include="FileOps.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
