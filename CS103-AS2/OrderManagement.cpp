@@ -7,33 +7,6 @@
 
 using namespace std;
 
-
-void userMenu(const User& user) {
-    int choice;
-    do {
-        cout << "Welcome, " << user.firstName << "! Please choose an option:\n";
-        cout << "1. Order Lunch\n";
-        cout << "2. View Bill\n";
-        cout << "3. Update Payment Method\n";
-        cout << "4. Exit\n";
-
-        cin >> choice;
-
-        switch (choice) {
-        case 1:
-            orderLunch(user);
-            break;
-            // I haven't done the View Bill or Payment Method Yet, sorry John :)
-        case 4:
-            cout << "Exiting...\n";
-            break;
-        default:
-            cout << "Invalid option!\n";
-            break;
-        }
-    } while (choice != 4);
-}
-
 void orderLunch(const User& user) {
     cout << "Please choose an option:\n";
     cout << "1. Hamburger ($5)\n";
@@ -67,3 +40,30 @@ void orderLunch(const User& user) {
     file << user.id << ',' << user.firstName << ',' << user.lastName << ',' << user.role << ',' << item << ',' << price << '\n';
     cout << "Order placed for " << item << " for " << price << " dollars.\n";
 }
+
+void userMenu(const User& user) {
+    int choice;
+    do {
+        cout << "Welcome, " << user.firstName << "! Please choose an option:\n";
+        cout << "1. Order Lunch\n";
+        cout << "2. View Bill\n";
+        cout << "3. Update Payment Method\n";
+        cout << "4. Exit\n";
+
+        cin >> choice;
+
+        switch (choice) {
+        case 1:
+            orderLunch(user);
+            break;
+            // I haven't done the View Bill or Payment Method Yet, sorry John :)
+        case 4:
+            cout << "Exiting...\n";
+            break;
+        default:
+            cout << "Invalid option!\n";
+            break;
+        }
+    } while (choice != 4);
+}
+
