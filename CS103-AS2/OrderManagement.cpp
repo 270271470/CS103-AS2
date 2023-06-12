@@ -66,4 +66,3 @@ void userMenu(const User& user) {
         }
     } while (choice != 4);
 }
-
