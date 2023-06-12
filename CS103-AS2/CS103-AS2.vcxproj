@@ -140,6 +140,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="AdminManagement.cpp" />
+    <ClCompile Include="CS103-AS2.cpp" />
     <ClCompile Include="MainMenu.cpp" />
     <ClCompile Include="UserManagement.cpp" />
     <ClCompile Include="FileOps.cpp" />
