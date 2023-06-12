@@ -2,6 +2,7 @@
 #include <iomanip>
 #include "MainMenu.h"
 #include "UserManagement.h"
+#include "AdminManagement.h"
 
 #ifdef _WIN32
 #define CLEAR "cls"
