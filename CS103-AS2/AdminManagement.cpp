@@ -8,6 +8,7 @@
 #include "AdminManagement.h"
 #include "OrderManagement.h"
 #include "FileOps.h"
+#include "WelcomeScreen.h"
 
 using namespace std;
 
@@ -18,6 +19,12 @@ using namespace std;
 #endif
 
 bool adminUser() {
+
+    system(CLEAR);
+
+    // Display Admin Welcome Screen
+    adminWelcome();
+
     string id, password;
     cout << "Enter Admin ID Number: ";
     cin >> id;

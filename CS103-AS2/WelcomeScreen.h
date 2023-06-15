@@ -2,3 +2,4 @@
 
 void displayWelcome();
 void userWelcome();
+void adminWelcome();
