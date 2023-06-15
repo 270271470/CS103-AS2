@@ -1,6 +1,10 @@
 Hamburger - $5
 Hotdog - $3
 Pizza - $7
+<<<<<<< HEAD
 Pizza - $7
 
 Total Amount: 22
+=======
+Total Amount: 15
+>>>>>>> john
