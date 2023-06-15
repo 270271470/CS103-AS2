@@ -1,6 +1,9 @@
+// System Includes
 #include <iostream>
 #include <fstream>
 #include <vector>
+
+// Our Includes
 #include "UserManagement.h"
 #include "AdminManagement.h"
 #include "OrderManagement.h"
@@ -18,14 +21,14 @@ bool adminUser() {
     string id, password;
     cout << "Enter Admin ID Number: ";
     cin >> id;
-    cout << "Enter Password: ";
-    cin >> password;
+    cout << "Enter Admin Password: ";
+    password = getPasswordInput();
 
     ifstream file("userdb.csv");
     string line;
     while (getline(file, line)) {
         vector<string> fields = split(line, ',');
-        if (fields[2] == id && fields[3] == password && fields[4] == "Admin") {
+        if (fields[2] == id && (decryptPassword(fields[3]) == password) && fields[4] == "Admin") {
             adminMenu();
             return true;
         }
@@ -62,8 +65,9 @@ void modifyUser() {
             cout << "Enter new Last Name (current is " << fields[1] << "): ";
             cin >> user.lastName;
             user.id = id;
-            cout << "Enter new Password (current is " << fields[3] << "): ";
-            cin >> user.password;
+            cout << "Enter new Password: ";
+            user.password = getPasswordInput();
+            user.password = encryptPassword(user.password);
             cout << "Enter new role (current is " << fields[4] << "): ";
             cin >> user.role;
             users.push_back(user);

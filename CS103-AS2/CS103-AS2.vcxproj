@@ -145,6 +145,7 @@
     <ClCompile Include="OrderManagement.cpp" />
     <ClCompile Include="UserManagement.cpp" />
     <ClCompile Include="FileOps.cpp" />
+    <ClCompile Include="WelcomeScreen.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AdminManagement.h" />
@@ -152,6 +153,7 @@
     <ClInclude Include="OrderManagement.h" />
     <ClInclude Include="UserManagement.h" />
     <ClInclude Include="FileOps.h" />
+    <ClInclude Include="WelcomeScreen.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

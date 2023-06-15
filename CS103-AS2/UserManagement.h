@@ -14,3 +14,6 @@ struct User {
 
 bool loginUser();
 void registerUser();
+string getPasswordInput();
+string encryptPassword(const string& password);
+string decryptPassword(const string& password);

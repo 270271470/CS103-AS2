@@ -6,6 +6,7 @@
 #include "MainMenu.h"
 #include "UserManagement.h"
 #include "AdminManagement.h"
+#include "WelcomeScreen.h"
 
 // To clear the screen after a user makes a selection
 #ifdef _WIN32
@@ -28,20 +29,26 @@ void displayMainMenu() {
             errorMsg = "";
         }
 
+        userWelcome();
         // Display menu selection to user
-        cout << "Please choose an option:\n";
-        cout << "1. Login\n";
-        cout << "2. Register as New User\n";
+        cout << endl;
+        cout << "Please Select An Option Below:" << endl << endl;
+        cout << "1. User Login\n";
+        cout << "2. Register as a New User\n";
         cout << "3. Administrator Login\n";
-        cout << "4. Exit\n";
+        cout << "0. Exit\n";
 
         // Capture the user's selection
-        cout << "Your choice: ";
+        cout << "================================================================" << endl;
+        cout << "Enter Your Selection: ";
         cin >> choice;
 
         // Here we are using a simple switch case and check if the user has enetered valid details
         // If no valid details are found in the userdb.csv file, we throw an error
         switch (choice) {
+        case 0:
+            cout << "Exiting the program...\n";
+            break;
         case 1:
             if (!loginUser()) {
                 errorMsg = "Invalid credentials!";
@@ -55,12 +62,9 @@ void displayMainMenu() {
                 errorMsg = "Invalid admin credentials!";
             }
             break;
-        case 4:
-            cout << "Exiting the program...\n";
-            break;
         default:
             errorMsg = "Invalid option!";
             break;
         }
-    } while (choice != 4);
+    } while (choice != 0);
 }
