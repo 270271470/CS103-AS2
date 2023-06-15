@@ -5,6 +5,7 @@
 #include "UserManagement.h"
 #include "AdminManagement.h"
 #include "FileOps.h"
+#include <Windows.h>
 
 #ifdef _WIN32
 #define CLEAR "cls"
@@ -18,6 +19,9 @@ string orderitems[5];
 string item[5] = { "a", "a", "a", "a", "a" };
 int price[5] = { 0,0,0,0,0 };
 int orderamount = 0; //sum of the order
+int orderlist = 0; //count for the orderitem
+
+bool existingOrder = false; //to check if there is a current order
 
 ofstream file("orderdb.csv", ios::app);
 
@@ -35,6 +39,9 @@ void viewBill() {
 void resetbill() {
     for (int x = 0; x < 5; x++) {
         orderitems[x] = "";
+        item[x] = "a";
+        price[x] = 0;
+        orderamount = 0;
     }
 }
 
@@ -59,9 +66,20 @@ void printBill(const User& user) {
 void orderLunch(const User& user) {
     int choice;
 
-    resetbill();
-    orderamount = 0; //sum of the order
-    int orderlist = 0; //count for the orderitem
+    if (existingOrder) {
+        int choiceOrder;
+
+        std::cout << "There is an existing order, Do you want to reset all orders?\n";
+        std::cout << "1. Yes\n";
+        std::cout << "2. No\n";
+        std::cout << "Enter your input here: ";
+        cin >> choiceOrder;
+
+        if (choiceOrder == 1) {
+            resetbill();
+            orderlist = 0; //count for the orderitem
+        }
+    }
 
     do {
         system(CLEAR);
@@ -75,6 +93,7 @@ void orderLunch(const User& user) {
         std::cout << "5. Rice Meal ($7)\n";
         std::cout << "0. End Order\n";
 
+        std::cout << "\nMinimum of 5 orders per customer.\n";
         std::cout << "Enter your choice here: ";
         cin >> choice;
         
@@ -119,7 +138,7 @@ void orderLunch(const User& user) {
 
 }
 
-void checkoutOrder() {
+void checkoutOrder(const User& user) {
     viewBill();
     std::cout << "Press Enter to confirm your order...";
     cin.ignore();
@@ -156,22 +175,28 @@ void checkoutOrder() {
         std::cout << "Payment Method: Cash\n";
         std::cout << "Place amount of cash: ";
         cin >> money;
-        do {
+        if (money != orderamount) {
+            do {
 
-            change = orderamount - money;
+                change = orderamount - money;
 
-            std::cout << "Received money is $" << change << " short\n";
-            std::cout << "Place amount of cash: ";
-            cin >> money;
-        } while (money < orderamount);
-        if (money > orderamount) {
-            change = money - orderamount;
-            std::cout << "Change: $" << change << endl;
+                std::cout << "Received money is $" << change << " short\n";
+                std::cout << "Place amount of cash: ";
+                cin >> money;
+            } while (money < orderamount);
+            if (money > orderamount) {
+                change = money - orderamount;
+                std::cout << "Change: $" << change << endl;
+            }
         }
     }
 
-    std::cout << "Thank you for ordering at LunchBytes!\n";
-    std::cout << "Exiting...\n";
+    printBill(user);
+
+    std::cout << "\nThank you for ordering at LunchBytes!\n";
+    std::cout << "Please take your receipt.\n";
+    std::cout << "\nExiting...\n";
+    Sleep(3000);
 
 }
 
@@ -190,13 +215,14 @@ void userMenu(const User& user) {
         case 1:
             system(CLEAR);
             orderLunch(user);
+            existingOrder = true;
             break;
         case 2:
             system(CLEAR);
             viewBill();
             break;
         case 3:
-            checkoutOrder();
+            checkoutOrder(user);
             choice = 0;
             break;
         case 0:
