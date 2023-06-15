@@ -6,6 +6,7 @@
 #include "AdminManagement.h"
 #include "FileOps.h"
 #include <Windows.h>
+#include "WelcomeScreen.h"
 
 #ifdef _WIN32
 #define CLEAR "cls"
@@ -68,10 +69,11 @@ void orderLunch(const User& user) {
 
     if (existingOrder) {
         int choiceOrder;
-
+        orderWelcome();
         std::cout << "There is an existing order, Do you want to reset all orders?\n";
         std::cout << "1. Yes\n";
         std::cout << "2. No\n";
+        cout << "================================================================" << endl;
         std::cout << "Enter your input here: ";
         cin >> choiceOrder;
 
@@ -203,12 +205,15 @@ void checkoutOrder(const User& user) {
 void userMenu(const User& user) {
     int choice;
     do {
+        orderWelcome();
         std::cout << "\nWelcome, " << user.firstName << "! Please choose an option:\n";
         std::cout << "1. Order Lunch\n";
         std::cout << "2. View Bill\n";
         std::cout << "3. Checkout Order\n";
         std::cout << "0. Exit\n";
 
+        cout << "================================================================" << endl;
+        cout << "Enter Your Selection: ";
         cin >> choice;
 
         switch (choice) {
