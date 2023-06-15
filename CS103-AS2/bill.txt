@@ -1,6 +1,6 @@
 Hamburger - $5
 Hotdog - $3
 Pizza - $7
-Hamburger - $5
+Pizza - $7
 
-Total Amount: 20
+Total Amount: 22
