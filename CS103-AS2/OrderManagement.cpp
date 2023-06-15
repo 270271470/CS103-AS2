@@ -15,13 +15,18 @@
 using namespace std;
 
 string orderitems[5];
+string item[5] = { "a", "a", "a", "a", "a" };
+int price[5] = { 0,0,0,0,0 };
 int orderamount = 0; //sum of the order
 
+ofstream file("orderdb.csv", ios::app);
+
 void viewBill() {
-    system(CLEAR);
     std::cout << "*======== Order List ========*\n" << endl;
     for (int x = 0; x < 5; x++) {
-        std::cout << orderitems[x] << endl;
+        if (item[x] != "a") {
+            std::cout << orderitems[x] << endl;
+        }
     }
     std::cout << "Total Amount: " << orderamount << endl;
     std::cout << "\n*============================*" << endl;
@@ -33,25 +38,41 @@ void resetbill() {
     }
 }
 
+void printBill(const User& user) {
+        for (int x = 0; x < 5; x++) {
+            if (item[x] != "a") {
+                file << user.id << ',' << user.firstName << ',' << user.lastName << ',' << user.role << ',' << item[x] << ',' << price[x] << '\n';
+            }
+        }
+
+    ofstream bill("bill.txt");
+    if (bill.is_open()) {
+        for (int x = 0; x < 5; x++) {
+            if (item[x] != "a") {
+                bill << orderitems[x] << endl;
+            }
+        }
+    }
+    bill << "Total Amount: " << orderamount << endl;
+}
+
 void orderLunch(const User& user) {
     int choice;
 
-    string item;
-    int price = 0;
     resetbill();
-    
     orderamount = 0; //sum of the order
     int orderlist = 0; //count for the orderitem
 
-    ofstream file("orderdb.csv", ios::app);
-
     do {
+        system(CLEAR);
         viewBill();
 
         std::cout << "\nPlease choose an option:\n";
         std::cout << "1. Hamburger ($5)\n";
         std::cout << "2. Hotdog ($3)\n";
         std::cout << "3. Pizza ($7)\n";
+        std::cout << "4. Sandwich ($4)\n";
+        std::cout << "5. Rice Meal ($7)\n";
         std::cout << "0. End Order\n";
 
         std::cout << "Enter your choice here: ";
@@ -59,44 +80,98 @@ void orderLunch(const User& user) {
         
         switch (choice) {
         case 1:
-            item = "Hamburger";
-            price = 5;
+            item[orderlist] = "Hamburger";
+            price[orderlist] = 5;
             orderitems[orderlist] = "Hamburger - $5";
             break;
         case 2:
-            item = "Hotdog";
-            price = 3;
+            item[orderlist] = "Hotdog";
+            price[orderlist] = 3;
             orderitems[orderlist] = "Hotdog - $3";
             break;
         case 3:
-            item = "Pizza";
-            price = 7;
+            item[orderlist] = "Pizza";
+            price[orderlist] = 7;
             orderitems[orderlist] = "Pizza - $7";
+            break;
+        case 4:
+            item[orderlist] = "Sandwich";
+            price[orderlist] = 4;
+            orderitems[orderlist] = "Sandwich - $4";
+            break;
+        case 5:
+            item[orderlist] = "Rice Meal";
+            price[orderlist] = 7;
+            orderitems[orderlist] = "Rice Meal - $7";
             break;
         default:
             std::cout << "Invalid option!\n";
             return;
         case 0:
+            system(CLEAR);
             break;
         }
 
+        orderamount += price[orderlist];
         orderlist++;
 
-        if (choice != 0) {
-            file << user.id << ',' << user.firstName << ',' << user.lastName << ',' << user.role << ',' << item << ',' << price << '\n';
-            std::cout << "\nOrder placed for " << item << " for " << price << " dollars.\n";
-            orderamount += price;
-        }
-
     } while (choice != 0);
-    
-    ofstream bill("bill.txt");
-    if (bill.is_open()) {
-        for (int x = 0; x < 5; x++) {
-            bill << orderitems[x] << endl;
+
+}
+
+void checkoutOrder() {
+    viewBill();
+    std::cout << "Press Enter to confirm your order...";
+    cin.ignore();
+
+    int money;
+    int choice;
+    int change;
+
+    system(CLEAR);
+    viewBill();
+    std::cout << "Choose Payment Method:\n";
+    std::cout << "1. Card\n";
+    std::cout << "2. Cash\n";
+    std::cout << "Enter your choice here: ";
+    cin >> choice;
+
+    system(CLEAR);
+    viewBill();
+    if (choice == 1) {
+        string confirm;
+
+        std::cout << "Payment Method: Card\n";
+        do {
+            std::cout << "\nInput CARD to confirm: ";
+            cin >> confirm;
+
+            if (confirm == "Card" || confirm == "card") {
+                std::cout << "Please type CARD in all capital letters." << endl;
+            }
+        } while (confirm != "CARD");
+        
+    }
+    else if (choice == 2) {
+        std::cout << "Payment Method: Cash\n";
+        std::cout << "Place amount of cash: ";
+        cin >> money;
+        do {
+
+            change = orderamount - money;
+
+            std::cout << "Received money is $" << change << " short\n";
+            std::cout << "Place amount of cash: ";
+            cin >> money;
+        } while (money < orderamount);
+        if (money > orderamount) {
+            change = money - orderamount;
+            std::cout << "Change: $" << change << endl;
         }
     }
-    bill << "Total Amount: " << orderamount << endl;
+
+    std::cout << "Thank you for ordering at LunchBytes!\n";
+    std::cout << "Exiting...\n";
 
 }
 
@@ -106,19 +181,24 @@ void userMenu(const User& user) {
         std::cout << "\nWelcome, " << user.firstName << "! Please choose an option:\n";
         std::cout << "1. Order Lunch\n";
         std::cout << "2. View Bill\n";
-        std::cout << "3. Update Payment Method\n";
+        std::cout << "3. Checkout Order\n";
         std::cout << "0. Exit\n";
 
         cin >> choice;
 
         switch (choice) {
         case 1:
+            system(CLEAR);
             orderLunch(user);
             break;
         case 2:
+            system(CLEAR);
             viewBill();
             break;
-            // Needs update payment, sorry me hehe
+        case 3:
+            checkoutOrder();
+            choice = 0;
+            break;
         case 0:
             std::cout << "Exiting...\n";
             break;
