@@ -42,6 +42,7 @@ string getPasswordInput() {
     return password;
 }
 
+// Function - Takes input from password and generates encrypted string.
 string encryptPassword(const string& password) {
     string encrypted = "";
     for (char c : password) {
@@ -52,6 +53,7 @@ string encryptPassword(const string& password) {
     return encrypted;
 }
 
+// Function - Takes input from password and reverse encrypted string.
 string decryptPassword(const string& password) {
     string decrypted = "";
     for (char c : password) {
@@ -77,6 +79,8 @@ void registerUser() {
     cout << "Enter Password: ";
     newUser.password = getPasswordInput();
 
+    cout << endl;
+
     string confirmPassword;
     cout << "Confirm Password: ";
     confirmPassword = getPasswordInput();
@@ -91,6 +95,8 @@ void registerUser() {
     }
 
     newUser.password = encryptPassword(newUser.password);
+
+    cout << endl;
 
     cout << "Are you a Teacher or Student?: ";
     cin >> newUser.role;
