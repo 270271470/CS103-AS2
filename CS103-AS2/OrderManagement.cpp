@@ -17,18 +17,20 @@
 using namespace std;
 
 struct order {
-    string item[5] = { "Hamburger","Hotdog","Pizza","Sanwich","Rice Meal" };
+    string item[5] = { "Hamburger","Hotdog","Pizza","Sandwich","Rice Meal" };
     int price[5] = { 5,3,7,4,7 };
     int quantity[5] = { 0,0,0,0,0 };
 }; //order placed in array, along with prices and quantity. The idea is that if the order item is 0, it won't be added to the list
 
+order ord;
 int orderamount = 0; //sum of the order
+string timeofpickup[2] = {"10am","12nn"};
 
 bool existingOrder = false; //to check if there is a current order
 
 ofstream file("orderdb.csv", ios::app);
 
-void viewBill(order ord) {
+void viewBill() {
     std::cout << "*======== Order List ========*\n" << endl;
     for (int x = 0; x < 5; x++) {
         if (ord.quantity[x] > 0) {
@@ -39,7 +41,7 @@ void viewBill(order ord) {
     std::cout << "\n*============================*" << endl;
 }
 
-void resetbill(order ord) {
+void resetbill() {
     for (int x = 0; x < 5; x++) {
         ord.quantity[x] = 0;
         orderamount = 0;
@@ -47,7 +49,6 @@ void resetbill(order ord) {
 }
 
 void printBill(const User& user) {
-    order ord;
         for (int x = 0; x < 5; x++) {
             if (ord.quantity != 0) {
                 file << user.id << ',' << user.firstName << ',' << user.lastName << ',' << user.role << ',' << ord.item[x] << ',' << ord.price[x] << '\n';
@@ -66,8 +67,9 @@ void printBill(const User& user) {
     bill << "Total Amount: " << orderamount << endl;
 }
 
-void orderLunch(const User& user, order ord) {
+void orderLunch(const User& user) {
     int choice;
+    int amount;
 
     if (existingOrder) {
         int choiceOrder;
@@ -80,46 +82,48 @@ void orderLunch(const User& user, order ord) {
         cin >> choiceOrder;
 
         if (choiceOrder == 1) {
-            resetbill(ord);
+            resetbill();
         }
     }
 
     do {
         system(CLEAR);
-        viewBill(ord);
+        viewBill();
 
         std::cout << "\nPlease choose an option:\n";
-        std::cout << "1. Hamburger ($5)\n";
-        std::cout << "2. Hotdog ($3)\n";
-        std::cout << "3. Pizza ($7)\n";
-        std::cout << "4. Sandwich ($4)\n";
-        std::cout << "5. Rice Meal ($7)\n";
+        for (int x = 0; x < 5; x++) {
+            std::cout << x + 1 << ". " << ord.item[x] << " ($" << ord.price[x] << ")" << endl;
+        }
         std::cout << "0. End Order\n";
 
         std::cout << "=================================\n";
         std::cout << "Enter your choice here: ";
         cin >> choice;
-        
+        if (choice != 0) {
+            std::cout << "Enter quantity of item here: ";
+            cin >> amount;
+        }
+
         switch (choice) {
         case 1:
-            ord.quantity[0] += 1;
-            orderamount += ord.price[0];
+            ord.quantity[0] += amount;
+            orderamount += (ord.price[0] * amount);
             break;
         case 2:
-            ord.quantity[1] += 1;
-            orderamount += ord.price[1];
+            ord.quantity[1] += amount;
+            orderamount += (ord.price[1] * amount);
             break;
         case 3:
-            ord.quantity[2] += 1;
-            orderamount += ord.price[2];
+            ord.quantity[2] += amount;
+            orderamount += (ord.price[2] * amount);
             break;
         case 4:
-            ord.quantity[3] += 1;
-            orderamount += ord.price[3];
+            ord.quantity[3] += amount;
+            orderamount += (ord.price[3] * amount);
             break;
         case 5:
-            ord.quantity[4] += 1;
-            orderamount += ord.price[4];
+            ord.quantity[4] += amount;
+            orderamount += (ord.price[4] * amount);
             break;
         default:
             std::cout << "Invalid option!\n";
@@ -133,17 +137,14 @@ void orderLunch(const User& user, order ord) {
 
 }
 
-void checkoutOrder(const User& user, order ord) {
-    viewBill(ord);
-    std::cout << "Press Enter to confirm your order...";
-    cin.ignore();
+void checkoutOrder(const User& user) {
 
     int money;
     int choice;
     int change;
 
     system(CLEAR);
-    viewBill(ord);
+    viewBill();
     std::cout << "Choose Payment Method:\n";
     std::cout << "1. Card\n";
     std::cout << "2. Cash\n";
@@ -151,7 +152,7 @@ void checkoutOrder(const User& user, order ord) {
     cin >> choice;
 
     system(CLEAR);
-    viewBill(ord);
+    viewBill();
     if (choice == 1) {
         string confirm;
 
@@ -195,33 +196,62 @@ void checkoutOrder(const User& user, order ord) {
 
 }
 
+void editBill() {
+    int choice;
+    int editmenu[5] = { -1,-1,-1,-1,-1 }; //default value; this is essential to making the edit menu dynamic
+    int editnumber = 1;
+
+    for (int x = 0; x < 5; x++) {
+        if (ord.quantity[x] != 0) {
+            for (int y = 0; y < 5; y++) {
+                if (editmenu[y] != -1) {
+                    editmenu[y] = x;
+                    break;
+                }
+            }
+        }
+    }
+
+    viewBill();
+
+    cout << "==========================" << endl;
+    cout << "If you wish to reduce your order,\nPlease choose an option:\n";
+    
+    for (int x = 0; x < 5; x++) {
+        if (editmenu[x] != -1) {
+            cout << x + 1 << ". " << ord.quantity[editmenu[x]] << " = " << ord.item[editmenu[x]] << " - $" << ord.price[editmenu[x]] << " each\n";
+        }
+    }
+    cin >> choice;
+
+}
+
 void userMenu(const User& user) {
-    order ord;
     int choice;
     do {
         orderWelcome();
         std::cout << "\nWelcome, " << user.firstName << "! Please choose an option:\n";
         std::cout << "1. Order Lunch\n";
-        std::cout << "2. View Bill\n";
+        std::cout << "2. View Bill / Edit Bill\n";
         std::cout << "3. Checkout Order\n";
         std::cout << "0. Exit\n";
 
-        cout << "================================================================" << endl;
+        cout << "==========================" << endl;
         cout << "Enter Your Selection: ";
         cin >> choice;
 
         switch (choice) {
         case 1:
             system(CLEAR);
-            orderLunch(user, ord);
+            orderLunch(user);
             existingOrder = true;
             break;
         case 2:
             system(CLEAR);
-            viewBill(ord);
+            editBill();
             break;
         case 3:
-            checkoutOrder(user, ord);
+            checkoutOrder(user);
             choice = 0;
             break;
         case 0:
