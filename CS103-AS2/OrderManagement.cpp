@@ -16,55 +16,57 @@
 
 using namespace std;
 
-string orderitems[5];
-string item[5] = { "a", "a", "a", "a", "a" };
-int price[5] = { 0,0,0,0,0 };
+struct order {
+    string item[5] = { "Hamburger","Hotdog","Pizza","Sanwich","Rice Meal" };
+    int price[5] = { 5,3,7,4,7 };
+    int quantity[5] = { 0,0,0,0,0 };
+}; //order placed in array, along with prices and quantity. The idea is that if the order item is 0, it won't be added to the list
+
 int orderamount = 0; //sum of the order
-int orderlist = 0; //count for the orderitem
 
 bool existingOrder = false; //to check if there is a current order
 
 ofstream file("orderdb.csv", ios::app);
 
-void viewBill() {
+void viewBill(order ord) {
     std::cout << "*======== Order List ========*\n" << endl;
     for (int x = 0; x < 5; x++) {
-        if (item[x] != "a") {
-            std::cout << orderitems[x] << endl;
+        if (ord.quantity[x] > 0) {
+            std::cout << ord.quantity[x] << " = " << ord.item[x] << " - $" << ord.price[x] << " each" << endl;
         }
     }
     std::cout << "Total Amount: " << orderamount << endl;
     std::cout << "\n*============================*" << endl;
 }
 
-void resetbill() {
+void resetbill(order ord) {
     for (int x = 0; x < 5; x++) {
-        orderitems[x] = "";
-        item[x] = "a";
-        price[x] = 0;
+        ord.quantity[x] = 0;
         orderamount = 0;
     }
 }
 
 void printBill(const User& user) {
+    order ord;
         for (int x = 0; x < 5; x++) {
-            if (item[x] != "a") {
-                file << user.id << ',' << user.firstName << ',' << user.lastName << ',' << user.role << ',' << item[x] << ',' << price[x] << '\n';
+            if (ord.quantity != 0) {
+                file << user.id << ',' << user.firstName << ',' << user.lastName << ',' << user.role << ',' << ord.item[x] << ',' << ord.price[x] << '\n';
             }
         }
 
     ofstream bill("bill.txt");
     if (bill.is_open()) {
         for (int x = 0; x < 5; x++) {
-            if (item[x] != "a") {
-                bill << orderitems[x] << endl;
+            if (ord.quantity != 0) {
+                bill << ord.item[x] << " - $" << ord.price[x] << endl;
             }
         }
     }
+    bill << "=============================" << endl;
     bill << "Total Amount: " << orderamount << endl;
 }
 
-void orderLunch(const User& user) {
+void orderLunch(const User& user, order ord) {
     int choice;
 
     if (existingOrder) {
@@ -78,14 +80,13 @@ void orderLunch(const User& user) {
         cin >> choiceOrder;
 
         if (choiceOrder == 1) {
-            resetbill();
-            orderlist = 0; //count for the orderitem
+            resetbill(ord);
         }
     }
 
     do {
         system(CLEAR);
-        viewBill();
+        viewBill(ord);
 
         std::cout << "\nPlease choose an option:\n";
         std::cout << "1. Hamburger ($5)\n";
@@ -95,35 +96,30 @@ void orderLunch(const User& user) {
         std::cout << "5. Rice Meal ($7)\n";
         std::cout << "0. End Order\n";
 
-        std::cout << "\nMinimum of 5 orders per customer.\n";
+        std::cout << "=================================\n";
         std::cout << "Enter your choice here: ";
         cin >> choice;
         
         switch (choice) {
         case 1:
-            item[orderlist] = "Hamburger";
-            price[orderlist] = 5;
-            orderitems[orderlist] = "Hamburger - $5";
+            ord.quantity[0] += 1;
+            orderamount += ord.price[0];
             break;
         case 2:
-            item[orderlist] = "Hotdog";
-            price[orderlist] = 3;
-            orderitems[orderlist] = "Hotdog - $3";
+            ord.quantity[1] += 1;
+            orderamount += ord.price[1];
             break;
         case 3:
-            item[orderlist] = "Pizza";
-            price[orderlist] = 7;
-            orderitems[orderlist] = "Pizza - $7";
+            ord.quantity[2] += 1;
+            orderamount += ord.price[2];
             break;
         case 4:
-            item[orderlist] = "Sandwich";
-            price[orderlist] = 4;
-            orderitems[orderlist] = "Sandwich - $4";
+            ord.quantity[3] += 1;
+            orderamount += ord.price[3];
             break;
         case 5:
-            item[orderlist] = "Rice Meal";
-            price[orderlist] = 7;
-            orderitems[orderlist] = "Rice Meal - $7";
+            ord.quantity[4] += 1;
+            orderamount += ord.price[4];
             break;
         default:
             std::cout << "Invalid option!\n";
@@ -133,15 +129,12 @@ void orderLunch(const User& user) {
             break;
         }
 
-        orderamount += price[orderlist];
-        orderlist++;
-
     } while (choice != 0);
 
 }
 
-void checkoutOrder(const User& user) {
-    viewBill();
+void checkoutOrder(const User& user, order ord) {
+    viewBill(ord);
     std::cout << "Press Enter to confirm your order...";
     cin.ignore();
 
@@ -150,7 +143,7 @@ void checkoutOrder(const User& user) {
     int change;
 
     system(CLEAR);
-    viewBill();
+    viewBill(ord);
     std::cout << "Choose Payment Method:\n";
     std::cout << "1. Card\n";
     std::cout << "2. Cash\n";
@@ -158,7 +151,7 @@ void checkoutOrder(const User& user) {
     cin >> choice;
 
     system(CLEAR);
-    viewBill();
+    viewBill(ord);
     if (choice == 1) {
         string confirm;
 
@@ -203,6 +196,7 @@ void checkoutOrder(const User& user) {
 }
 
 void userMenu(const User& user) {
+    order ord;
     int choice;
     do {
         orderWelcome();
@@ -219,15 +213,15 @@ void userMenu(const User& user) {
         switch (choice) {
         case 1:
             system(CLEAR);
-            orderLunch(user);
+            orderLunch(user, ord);
             existingOrder = true;
             break;
         case 2:
             system(CLEAR);
-            viewBill();
+            viewBill(ord);
             break;
         case 3:
-            checkoutOrder(user);
+            checkoutOrder(user, ord);
             choice = 0;
             break;
         case 0:
