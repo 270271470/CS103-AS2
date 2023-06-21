@@ -58,7 +58,7 @@ void resetbill() {
 void printBill(const User& user) {
     for (int x = 0; x < 5; x++) {
         if (ord.quantity != 0) {
-            file << user.id << ',' << user.firstName << ',' << user.lastName << ',' << user.role << ',' << ord.item[x] << ',' << ord.price[x] << '\n';
+            file << user.id << ',' << user.firstName << ',' << user.lastName << ',' << user.role << ',' << ord.item[x] << ',' << ord.price[x] << ord.quantity[x] <<'\n';
         }
     }
 
@@ -66,7 +66,7 @@ void printBill(const User& user) {
     if (bill.is_open()) {
         for (int x = 0; x < 5; x++) {
             if (ord.quantity != 0) {
-                bill << ord.item[x] << " - $" << ord.price[x] << endl;
+                bill << ord.quantity[x] << " = " << ord.item[x] << " - $" << ord.price[x] << endl;
             }
         }
     }
