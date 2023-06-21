@@ -31,6 +31,13 @@ bool existingOrder = false; //to check if there is a current order
 ofstream file("orderdb.csv", ios::app);
 
 void viewBill() {
+
+    for (int x = 0; x < 5; x++) {
+        if (ord.quantity[x] < 0) {
+            ord.quantity[x] = 0;
+        }
+    }
+
     std::cout << "*======== Order List ========*\n" << endl;
     for (int x = 0; x < 5; x++) {
         if (ord.quantity[x] > 0) {
@@ -221,34 +228,44 @@ void editBill() {
             cin >> amount;
         }
 
-        switch (choice) {
-        case 1:
-            ord.quantity[0] -= amount;
-            orderamount -= (ord.price[0] * amount);
-            break;
-        case 2:
-            ord.quantity[1] -= amount;
-            orderamount -= (ord.price[1] * amount);
-            break;
-        case 3:
-            ord.quantity[2] -= amount;
-            orderamount -= (ord.price[2] * amount);
-            break;
-        case 4:
-            ord.quantity[3] -= amount;
-            orderamount -= (ord.price[3] * amount);
-            break;
-        case 5:
-            ord.quantity[4] -= amount;
-            orderamount -= (ord.price[4] * amount);
-            break;
-        default:
-            std::cout << "Invalid option!\n";
-            return;
-        case 0:
-            system(CLEAR);
-            break;
-        }
+            switch (choice) {
+            case 1:
+                if (ord.quantity[0] > 0) {
+                    ord.quantity[0] -= amount;
+                    orderamount -= (ord.price[0] * amount);
+                }
+                break;
+            case 2:
+                if (ord.quantity[1] > 0) {
+                    ord.quantity[1] -= amount;
+                    orderamount -= (ord.price[1] * amount);
+                }
+                break;
+            case 3:
+                if (ord.quantity[2] > 0) {
+                    ord.quantity[2] -= amount;
+                    orderamount -= (ord.price[2] * amount);
+                }
+                break;
+            case 4:
+                if (ord.quantity[3] > 0) {
+                    ord.quantity[3] -= amount;
+                    orderamount -= (ord.price[3] * amount);
+                }
+                break;
+            case 5:
+                if (ord.quantity[4] > 0) {
+                    ord.quantity[4] -= amount;
+                    orderamount -= (ord.price[4] * amount);
+                }
+                break;
+            default:
+                std::cout << "Invalid option!\n";
+                return;
+            case 0:
+                system(CLEAR);
+                break;
+            }
     } while (choice != 0);
 
 }
