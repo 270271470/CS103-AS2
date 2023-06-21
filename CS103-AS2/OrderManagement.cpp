@@ -24,7 +24,7 @@ struct order {
 
 order ord;
 int orderamount = 0; //sum of the order
-string timeofpickup[2] = {"10am","12nn"};
+string timeofpickup[2] = { "10am","12nn" };
 
 bool existingOrder = false; //to check if there is a current order
 
@@ -49,11 +49,11 @@ void resetbill() {
 }
 
 void printBill(const User& user) {
-        for (int x = 0; x < 5; x++) {
-            if (ord.quantity != 0) {
-                file << user.id << ',' << user.firstName << ',' << user.lastName << ',' << user.role << ',' << ord.item[x] << ',' << ord.price[x] << '\n';
-            }
+    for (int x = 0; x < 5; x++) {
+        if (ord.quantity != 0) {
+            file << user.id << ',' << user.firstName << ',' << user.lastName << ',' << user.role << ',' << ord.item[x] << ',' << ord.price[x] << '\n';
         }
+    }
 
     ofstream bill("bill.txt");
     if (bill.is_open()) {
@@ -165,7 +165,7 @@ void checkoutOrder(const User& user) {
                 std::cout << "Please type CARD in all capital letters." << endl;
             }
         } while (confirm != "CARD");
-        
+
     }
     else if (choice == 2) {
         std::cout << "Payment Method: Cash\n";
@@ -198,37 +198,65 @@ void checkoutOrder(const User& user) {
 
 void editBill() {
     int choice;
-    int editmenu[5] = { -1,-1,-1,-1,-1 }; //default value; this is essential to making the edit menu dynamic
-    int editnumber = 1;
+    int amount;
 
-    for (int x = 0; x < 5; x++) {
-        if (ord.quantity[x] != 0) {
-            for (int y = 0; y < 5; y++) {
-                if (editmenu[y] != -1) {
-                    editmenu[y] = x;
-                    break;
-                }
+    do {
+        system(CLEAR);
+        viewBill();
+        Sleep(1000);
+
+        cout << "\nIf you wish to reduce your order,\nPlease choose an option:\n";
+        for (int x = 0; x < 5; x++) {
+            if (ord.quantity[x] != 0) {
+                cout << x + 1 << ". " << ord.quantity[x] << " = " << ord.item[x] << " - $" << ord.price[x] << " each\n";
             }
         }
-    }
+        cout << "0. Exit\n";
 
-    viewBill();
-
-    cout << "==========================" << endl;
-    cout << "If you wish to reduce your order,\nPlease choose an option:\n";
-    
-    for (int x = 0; x < 5; x++) {
-        if (editmenu[x] != -1) {
-            cout << x + 1 << ". " << ord.quantity[editmenu[x]] << " = " << ord.item[editmenu[x]] << " - $" << ord.price[editmenu[x]] << " each\n";
+        std::cout << "=================================\n";
+        std::cout << "Enter your choice here: ";
+        cin >> choice;
+        if (choice != 0) {
+            std::cout << "Enter quantity to reduce: ";
+            cin >> amount;
         }
-    }
-    cin >> choice;
+
+        switch (choice) {
+        case 1:
+            ord.quantity[0] -= amount;
+            orderamount -= (ord.price[0] * amount);
+            break;
+        case 2:
+            ord.quantity[1] -= amount;
+            orderamount -= (ord.price[1] * amount);
+            break;
+        case 3:
+            ord.quantity[2] -= amount;
+            orderamount -= (ord.price[2] * amount);
+            break;
+        case 4:
+            ord.quantity[3] -= amount;
+            orderamount -= (ord.price[3] * amount);
+            break;
+        case 5:
+            ord.quantity[4] -= amount;
+            orderamount -= (ord.price[4] * amount);
+            break;
+        default:
+            std::cout << "Invalid option!\n";
+            return;
+        case 0:
+            system(CLEAR);
+            break;
+        }
+    } while (choice != 0);
 
 }
 
 void userMenu(const User& user) {
     int choice;
     do {
+        system(CLEAR);
         orderWelcome();
         std::cout << "\nWelcome, " << user.firstName << "! Please choose an option:\n";
         std::cout << "1. Order Lunch\n";
