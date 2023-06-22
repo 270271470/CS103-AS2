@@ -1,22 +1,3 @@
 
-11,JM,Brillante,Student,Hamburger,5
-11,JM,Brillante,Student,Pizza,7
-11,JM,Brillante,Student,Rice Meal,7
-11,JM,Brillante,Student,Hotdog,3
-11,JM,Brillante,Student,Hamburger,5
-11,JM,Brillante,Student,Hotdog,3
-11,JM,Brillante,Student,Pizza,7
-11,JM,Brillante,Student,Hamburger,5
-11,JM,Brillante,Student,,0
-11,JM,Brillante,Student,,0
-11,JM,Brillante,Student,Hotdog,3
-2,Mauritz,Koekemoer,Student,Hamburger,51
-2,Mauritz,Koekemoer,Student,Hotdog,30
-2,Mauritz,Koekemoer,Student,Pizza,70
-2,Mauritz,Koekemoer,Student,Sandwich,40
-2,Mauritz,Koekemoer,Student,Rice Meal,70
-2,Mauritz,Koekemoer,Student,Hamburger,50
-2,Mauritz,Koekemoer,Student,Hotdog,35
-2,Mauritz,Koekemoer,Student,Pizza,70
-2,Mauritz,Koekemoer,Student,Sandwich,40
-2,Mauritz,Koekemoer,Student,Rice Meal,70
+1,11,JM,Brillante,Student,Hamburger,5,2,10
+2,11,JM,Brillante,Student,Pizza,7,1,7

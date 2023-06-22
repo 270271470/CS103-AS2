@@ -24,11 +24,10 @@ struct order {
 
 order ord;
 int orderamount = 0; //sum of the order
-string timeofpickup[2] = { "10am","12nn" };
 
 bool existingOrder = false; //to check if there is a current order
 
-ofstream file("orderdb.csv", ios::app);
+std::fstream orderFile("orderdb.csv", std::ios::in | std::ios::out | std::ios::app);
 
 void viewBill() {
 
@@ -56,11 +55,45 @@ void resetbill() {
 }
 
 void printBill(const User& user) {
+    // Check if orderFile is empty
+    orderFile.seekg(0, std::ios::end);
+    bool isEmpty = !orderFile.tellg();
+    if (isEmpty) {
+        orderFile << "OrderNumber,UserID,FirstName,LastName,Role,OrderItem,OrderPrice,OrderQnty,OrderTotal\n";
+    }
+
+
+
+    // Get current order number
+    int orderNumber = 0;
+    orderFile.seekg(0, std::ios::beg);
+    std::string line;
+    while (std::getline(orderFile, line)) ++orderNumber;
+
+
+
+    orderFile.clear(); // Clear EOF flag to allow writing
+
+
+
+    // Write orders
     for (int x = 0; x < 5; x++) {
-        if (ord.quantity != 0) {
-            file << user.id << ',' << user.firstName << ',' << user.lastName << ',' << user.role << ',' << ord.item[x] << ',' << ord.price[x] << ord.quantity[x] <<'\n';
+        if (ord.quantity[x] > 0) {
+            orderFile << orderNumber++ << ','
+                << user.id << ','
+                << user.firstName << ','
+                << user.lastName << ','
+                << user.role << ','
+                << ord.item[x] << ','
+                << ord.price[x] << ','
+                << ord.quantity[x] << ','
+                << orderamount << '\n';
         }
     }
+
+
+
+    orderFile.close();
 
     ofstream bill("bill.txt");
     if (bill.is_open()) {
