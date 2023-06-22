@@ -1,6 +1,7 @@
 #include <iostream>
 #include <fstream>
 #include <vector>
+#include <Windows.h>
 // Using this library to mask the user password
 #include <conio.h>
 
@@ -9,6 +10,7 @@
 #include "AdminManagement.h"
 #include "OrderManagement.h"
 #include "FileOps.h"
+#include "WelcomeScreen.h"
 
 using namespace std;
 
@@ -66,6 +68,10 @@ string decryptPassword(const string& password) {
 
 void registerUser() {
 
+    system(CLEAR);
+    // Display User Registration Nav Screen
+    userRegNav();
+
     User newUser;
     cout << "Enter First Name: ";
     cin >> newUser.firstName;
@@ -107,36 +113,43 @@ void registerUser() {
         << newUser.id << ","
         << newUser.password << ","
         << newUser.role << "\n";
+
+    cout << "Registration Successful. Redirecting To Main Menu...";
+    Sleep(2500);
 }
 
 bool loginUser() {
 
-    string id, password;
-    cout << "Enter ID Number: ";
-    cin >> id;
-    cout << "Enter Password: ";
-    password = getPasswordInput();
+        system(CLEAR);
+        // Display User Registration Nav Screen
+        userLoginNav();
 
-    ifstream file("userdb.csv");
-    string line;
+        string id, password;
+        cout << "User ID Number: ";
+        cin >> id;
+        cout << "Enter Password: ";
+        password = getPasswordInput();
 
-    while (getline(file, line)) {
+        ifstream file("userdb.csv");
+        string line;
 
-        vector<string> fields = split(line, ',');
+        while (getline(file, line)) {
 
-        if (fields[2] == id && decryptPassword(fields[3]) == password) {
-            cout << "Login successful!\n";
-            User user{ fields[0], fields[1], fields[2], fields[3], fields[4] };
-            system(CLEAR);
-            if (user.role == "Admin") {
-                adminMenu();
+            vector<string> fields = split(line, ',');
+
+            if (fields[2] == id && decryptPassword(fields[3]) == password) {
+                cout << "Login successful!\n";
+                User user{ fields[0], fields[1], fields[2], fields[3], fields[4] };
+                system(CLEAR);
+                if (user.role == "Admin") {
+                    adminMenu();
+                }
+                else {
+                    userMenu(user);
+                }
+                return true;
             }
-            else {
-                userMenu(user);
-            }
-            return true;
         }
-    }
 
-    return false;
+        return false;
 }

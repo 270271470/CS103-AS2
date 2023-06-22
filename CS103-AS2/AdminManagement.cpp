@@ -2,8 +2,10 @@
 #include <iostream>
 #include <fstream>
 #include <vector>
+#include <Windows.h>
 
 // Our Includes
+#include "MainMenu.h"
 #include "UserManagement.h"
 #include "AdminManagement.h"
 #include "OrderManagement.h"
@@ -21,9 +23,8 @@ using namespace std;
 bool adminUser() {
 
     system(CLEAR);
-
     // Display Admin Welcome Screen
-    adminWelcome();
+    adminMenuNav();
 
     string id, password;
     cout << "Enter Admin ID Number: ";
@@ -31,11 +32,15 @@ bool adminUser() {
     cout << "Enter Admin Password: ";
     password = getPasswordInput();
 
+    system(CLEAR);
+
     ifstream file("userdb.csv");
     string line;
     while (getline(file, line)) {
         vector<string> fields = split(line, ',');
         if (fields[2] == id && (decryptPassword(fields[3]) == password) && fields[4] == "Admin") {
+            // Display Admin Welcome Screen
+            adminMenuNav();
             adminMenu();
             return true;
         }
@@ -44,6 +49,11 @@ bool adminUser() {
 }
 
 void viewRecords() {
+
+    system(CLEAR);
+
+    adminMenuURecords();
+
     ifstream file("userdb.csv");
     string line;
     while (getline(file, line)) {
@@ -56,6 +66,11 @@ void addUser() {
 }
 
 void modifyUser() {
+
+    system(CLEAR);
+    // Display Admin Welcome Screen
+    adminMenuModifyNav();
+
     string id;
     cout << "Enter the ID of the user to modify: ";
     cin >> id;
@@ -75,6 +90,7 @@ void modifyUser() {
             cout << "Enter new Password: ";
             user.password = getPasswordInput();
             user.password = encryptPassword(user.password);
+            cout << endl;
             cout << "Enter new role (current is " << fields[4] << "): ";
             cin >> user.role;
             users.push_back(user);
@@ -96,6 +112,7 @@ void modifyUser() {
 }
 
 void deleteUser() {
+
     string id;
     cout << "Enter the ID of the user to delete: ";
     cin >> id;
@@ -122,17 +139,33 @@ void deleteUser() {
 }
 
 void adminMenu() {
+
+    system(CLEAR);
+    // Display Admin Welcome Screen
+    adminMenuNav();
+
     int choice;
     do {
+
+        setConsoleColor(FOREGROUND_RED | BACKGROUND_BLUE | BACKGROUND_GREEN | BACKGROUND_RED);
         cout << "\nAdmin Menu:\n";
+        setConsoleColor(7 | BACKGROUND_BLUE);
         cout << "1. View all records\n";
         cout << "2. Add a new user\n";
         cout << "3. Modify an existing user\n";
         cout << "4. Delete a user\n";
-        cout << "5. Exit\n";
+        cout << "0. Exit\n";
+        // Capture the user's selection
+        cout << "================================================================" << endl;
+        setConsoleColor(FOREGROUND_RED | BACKGROUND_BLUE | BACKGROUND_GREEN | BACKGROUND_RED);
+        cout << "Enter Your Selection:";
+        setConsoleColor(7 | BACKGROUND_BLUE);
         cin >> choice;
 
         switch (choice) {
+        case 0:
+            cout << "Exiting the admin menu...\n";
+            break;
         case 1:
             viewRecords();
             break;
@@ -145,12 +178,9 @@ void adminMenu() {
         case 4:
             deleteUser();
             break;
-        case 5:
-            cout << "Exiting the admin menu...\n";
-            break;
         default:
             cout << "Invalid option!\n";
             break;
         }
-    } while (choice != 5);
+    } while (choice != 0);
 }

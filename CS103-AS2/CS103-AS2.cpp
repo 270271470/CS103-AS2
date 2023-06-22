@@ -11,7 +11,7 @@ int main() {
 
     // Display Welcome Screen
     displayWelcome();
-    Sleep(2000);
+    Sleep(1000);
 
     // Call displayMainMenu declared in MainMenu.h
     displayMainMenu();

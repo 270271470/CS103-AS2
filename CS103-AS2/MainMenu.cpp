@@ -1,6 +1,8 @@
 // Including standard IO
 #include <iostream>
 #include <iomanip>
+#include <windows.h>
+
 // Including our modular header files
 
 #include "MainMenu.h"
@@ -15,6 +17,12 @@
 #define CLEAR "clear"
 #endif
 
+// c = 7 for default color
+void setConsoleColor(WORD c)
+{
+    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), c);
+}
+
 // Function to display our MainMenu
 void displayMainMenu() {
 
@@ -23,13 +31,17 @@ void displayMainMenu() {
 
     do {
 
+        setConsoleColor(1 | 3);
+
         system(CLEAR);
         if (!errorMsg.empty()) {
+            setConsoleColor(FOREGROUND_RED | BACKGROUND_BLUE | BACKGROUND_GREEN | BACKGROUND_RED);
             cout << errorMsg << "\n";
             errorMsg = "";
+            setConsoleColor(3 | BACKGROUND_BLUE);
         }
 
-        userWelcome();
+        mainMenuNav();
         // Display menu selection to user
         cout << endl;
         cout << "Please Select An Option Below:" << endl << endl;
@@ -39,8 +51,10 @@ void displayMainMenu() {
         cout << "0. Exit\n";
 
         // Capture the user's selection
+        setConsoleColor(FOREGROUND_RED | BACKGROUND_BLUE | BACKGROUND_GREEN | BACKGROUND_RED);
         cout << "================================================================" << endl;
-        cout << "Enter Your Selection: ";
+        setConsoleColor(7 | 3);
+        cout << "Enter Your Selection:";
         cin >> choice;
 
         // Here we are using a simple switch case and check if the user has enetered valid details

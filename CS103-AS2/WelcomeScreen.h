@@ -1,5 +1,10 @@
 #pragma once
 
 void displayWelcome();
-void userWelcome();
-void adminWelcome();
+void mainMenuNav();
+void userLoginNav();
+void userRegNav();
+void adminMenuNav();
+void adminMenuURecords();
+void adminMenuModifyNav();
+void orderMenuNav();
