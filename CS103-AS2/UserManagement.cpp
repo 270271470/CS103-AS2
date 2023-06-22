@@ -73,6 +73,8 @@ void registerUser() {
     userRegNav();
 
     User newUser;
+
+    cout << endl;
     cout << "Enter First Name: ";
     cin >> newUser.firstName;
 
@@ -125,6 +127,7 @@ bool loginUser() {
         userLoginNav();
 
         string id, password;
+        cout << endl;
         cout << "User ID Number: ";
         cin >> id;
         cout << "Enter Password: ";

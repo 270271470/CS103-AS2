@@ -27,6 +27,8 @@ bool adminUser() {
     adminMenuNav();
 
     string id, password;
+
+    cout << endl;
     cout << "Enter Admin ID Number: ";
     cin >> id;
     cout << "Enter Admin Password: ";
@@ -56,9 +58,13 @@ void viewRecords() {
 
     ifstream file("userdb.csv");
     string line;
+    setConsoleColor(FOREGROUND_RED | BACKGROUND_BLUE | BACKGROUND_GREEN | BACKGROUND_RED);
+
+    cout << endl;
     while (getline(file, line)) {
         cout << line << "\n";
     }
+    setConsoleColor(1 | 3);
 }
 
 void addUser() {
@@ -72,6 +78,7 @@ void modifyUser() {
     adminMenuModifyNav();
 
     string id;
+    cout << endl;
     cout << "Enter the ID of the user to modify: ";
     cin >> id;
 
@@ -82,6 +89,7 @@ void modifyUser() {
         vector<string> fields = split(line, ',');
         if (fields[2] == id) {
             User user;
+            cout << endl;
             cout << "Enter new First Name (current is " << fields[0] << "): ";
             cin >> user.firstName;
             cout << "Enter new Last Name (current is " << fields[1] << "): ";
@@ -137,6 +145,22 @@ void deleteUser() {
             << user.role << "\n";
     }
 }
+void viewOrders() {
+
+    system(CLEAR);
+
+    adminMenuOrders();
+
+    ifstream file("orderdb.csv");
+    string line;
+    setConsoleColor(FOREGROUND_RED | BACKGROUND_BLUE | BACKGROUND_GREEN | BACKGROUND_RED);
+
+    cout << endl;
+    while (getline(file, line)) {
+        cout << line << "\n";
+    }
+    setConsoleColor(1 | 3);
+}
 
 void adminMenu() {
 
@@ -147,24 +171,31 @@ void adminMenu() {
     int choice;
     do {
 
-        setConsoleColor(FOREGROUND_RED | BACKGROUND_BLUE | BACKGROUND_GREEN | BACKGROUND_RED);
-        cout << "\nAdmin Menu:\n";
-        setConsoleColor(7 | BACKGROUND_BLUE);
-        cout << "1. View all records\n";
-        cout << "2. Add a new user\n";
-        cout << "3. Modify an existing user\n";
-        cout << "4. Delete a user\n";
+        cout << endl;
+        cout << "1. View All Users\n";
+        cout << "2. Add New User\n";
+        cout << "3. Update User Information\n";
+        cout << "4. Delete User\n";
+        cout << "------------------------------\n";
+        cout << "5. View Orders\n";
+        cout << "6. Update Order\n";
+        cout << "7. Delete Order\n";
+        cout << endl;
         cout << "0. Exit\n";
         // Capture the user's selection
-        cout << "================================================================" << endl;
-        setConsoleColor(FOREGROUND_RED | BACKGROUND_BLUE | BACKGROUND_GREEN | BACKGROUND_RED);
-        cout << "Enter Your Selection:";
-        setConsoleColor(7 | BACKGROUND_BLUE);
+        cout << endl;
+        setConsoleColor(0 | BACKGROUND_GREEN | BACKGROUND_BLUE);
+        cout << "================================================================";
+        setConsoleColor(1 | 3);
+        cout << endl;
+        cout << endl;
+        setConsoleColor(1 | 3);
+        cout << "Please Enter Your Selection: ";
         cin >> choice;
 
         switch (choice) {
         case 0:
-            cout << "Exiting the admin menu...\n";
+            cout << "Exiting the Admin Menu...\n";
             break;
         case 1:
             viewRecords();
@@ -176,6 +207,15 @@ void adminMenu() {
             modifyUser();
             break;
         case 4:
+            deleteUser();
+            break;
+        case 5:
+            viewOrders();
+            break;
+        case 6:
+            deleteUser();
+            break;
+        case 7:
             deleteUser();
             break;
         default:

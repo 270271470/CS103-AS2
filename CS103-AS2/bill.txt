@@ -1,2 +1,7 @@
-Hotdog - $3
-Total Amount: 3
+0 = Hamburger - $5
+5 = Hotdog - $3
+0 = Pizza - $7
+0 = Sandwich - $4
+0 = Rice Meal - $7
+=============================
+Total Amount: 15

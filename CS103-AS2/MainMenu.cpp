@@ -34,27 +34,31 @@ void displayMainMenu() {
         setConsoleColor(1 | 3);
 
         system(CLEAR);
+
         if (!errorMsg.empty()) {
             setConsoleColor(FOREGROUND_RED | BACKGROUND_BLUE | BACKGROUND_GREEN | BACKGROUND_RED);
             cout << errorMsg << "\n";
             errorMsg = "";
-            setConsoleColor(3 | BACKGROUND_BLUE);
+            setConsoleColor(1 | 3);
         }
 
         mainMenuNav();
         // Display menu selection to user
         cout << endl;
-        cout << "Please Select An Option Below:" << endl << endl;
+        cout << endl;
         cout << "1. User Login\n";
         cout << "2. Register as a New User\n";
         cout << "3. Administrator Login\n";
+        cout << endl;
         cout << "0. Exit\n";
+        cout << endl;
 
         // Capture the user's selection
-        setConsoleColor(FOREGROUND_RED | BACKGROUND_BLUE | BACKGROUND_GREEN | BACKGROUND_RED);
+        setConsoleColor(0 | BACKGROUND_GREEN | BACKGROUND_BLUE);
         cout << "================================================================" << endl;
-        setConsoleColor(7 | 3);
-        cout << "Enter Your Selection:";
+        cout << endl;
+        setConsoleColor(1 | 3);
+        cout << "Please Enter Your Selection: ";
         cin >> choice;
 
         // Here we are using a simple switch case and check if the user has enetered valid details

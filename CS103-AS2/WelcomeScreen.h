@@ -8,3 +8,4 @@ void adminMenuNav();
 void adminMenuURecords();
 void adminMenuModifyNav();
 void orderMenuNav();
+void adminMenuOrders();

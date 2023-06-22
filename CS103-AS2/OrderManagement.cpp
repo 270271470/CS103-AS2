@@ -80,7 +80,7 @@ void orderLunch(const User& user) {
 
     if (existingOrder) {
         int choiceOrder;
-        orderWelcome();
+        orderMenuNav();
         std::cout << "There is an existing order, Do you want to reset all orders?\n";
         std::cout << "1. Yes\n";
         std::cout << "2. No\n";
@@ -274,7 +274,7 @@ void userMenu(const User& user) {
     int choice;
     do {
         system(CLEAR);
-        orderWelcome();
+        orderMenuNav();
         std::cout << "\nWelcome, " << user.firstName << "! Please choose an option:\n";
         std::cout << "1. Order Lunch\n";
         std::cout << "2. View Bill / Edit Bill\n";
