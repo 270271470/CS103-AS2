@@ -26,6 +26,7 @@ order ord;
 int orderamount = 0; //sum of the order
 
 bool existingOrder = false; //to check if there is a current order
+bool paidOrder = false; //to check if previous order was already paid. If that was the case the bill should be reset and there should be no existing order
 
 std::fstream orderFile("orderdb.csv", std::ios::in | std::ios::out | std::ios::app);
 
@@ -40,7 +41,7 @@ void viewBill() {
     std::cout << "*======== Order List ========*\n" << endl;
     for (int x = 0; x < 5; x++) {
         if (ord.quantity[x] > 0) {
-            std::cout << ord.quantity[x] << " = " << ord.item[x] << " - $" << ord.price[x] << " each" << endl;
+            std::cout << ord.item[x] << " - $" << ord.price[x] << " each = " << ord.quantity[x] << " orders total: " << ord.quantity[x]*ord.price[x] << endl;
         }
     }
     std::cout << "Total Amount: " << orderamount << endl;
@@ -95,21 +96,17 @@ void printBill(const User& user) {
 
     orderFile.close();
 
-    ofstream bill("bill.txt");
-    if (bill.is_open()) {
-        for (int x = 0; x < 5; x++) {
-            if (ord.quantity != 0) {
-                bill << ord.quantity[x] << " = " << ord.item[x] << " - $" << ord.price[x] << endl;
-            }
-        }
-    }
-    bill << "=============================" << endl;
-    bill << "Total Amount: " << orderamount << endl;
 }
 
 void orderLunch(const User& user) {
     int choice;
     int amount;
+
+    if (paidOrder) {
+        resetbill();
+        existingOrder = false;
+        paidOrder = false;
+    }
 
     if (existingOrder) {
         int choiceOrder;
@@ -188,6 +185,7 @@ void checkoutOrder(const User& user) {
     std::cout << "Choose Payment Method:\n";
     std::cout << "1. Card\n";
     std::cout << "2. Cash\n";
+    std::cout << "0. Back\n";
     std::cout << "Enter your choice here: ";
     cin >> choice;
 
@@ -205,6 +203,7 @@ void checkoutOrder(const User& user) {
                 std::cout << "Please type CARD in all capital letters." << endl;
             }
         } while (confirm != "CARD");
+        paidOrder = true;
 
     }
     else if (choice == 2) {
@@ -212,28 +211,31 @@ void checkoutOrder(const User& user) {
         std::cout << "Place amount of cash: ";
         cin >> money;
         if (money != orderamount) {
-            do {
-
-                change = orderamount - money;
-
-                std::cout << "Received money is $" << change << " short\n";
-                std::cout << "Place amount of cash: ";
-                cin >> money;
-            } while (money < orderamount);
             if (money > orderamount) {
                 change = money - orderamount;
                 std::cout << "Change: $" << change << endl;
             }
+            else if (money < orderamount) {
+                do {
+
+                    change = orderamount - money;
+
+                    std::cout << "Received money is $" << change << " short\n";
+                    std::cout << "Place amount of cash: ";
+                    cin >> money;
+                } while (money <= orderamount);
+            }
         }
+        paidOrder = true;
     }
+    if (paidOrder) {
+        printBill(user);
 
-    printBill(user);
-
-    std::cout << "\nThank you for ordering at LunchBytes!\n";
-    std::cout << "Please take your receipt.\n";
-    std::cout << "\nExiting...\n";
-    Sleep(3000);
-
+        std::cout << "\nThank you for ordering at LunchBytes!\n";
+        std::cout << "Please take your receipt.\n";
+        std::cout << "\nExiting...\n";
+        Sleep(3000);
+    }
 }
 
 void editBill() {
