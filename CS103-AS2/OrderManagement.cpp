@@ -41,10 +41,10 @@ void viewBill() {
     std::cout << "*======== Order List ========*\n" << endl;
     for (int x = 0; x < 5; x++) {
         if (ord.quantity[x] > 0) {
-            std::cout << ord.item[x] << " - $" << ord.price[x] << " each = " << ord.quantity[x] << " orders total: " << ord.quantity[x]*ord.price[x] << endl;
+            std::cout << ord.item[x] << " - $" << ord.price[x] << " each = " << ord.quantity[x] << " orders total: $" << ord.quantity[x]*ord.price[x] << endl;
         }
     }
-    std::cout << "Total Amount: " << orderamount << endl;
+    std::cout << "Total Amount: $" << orderamount << endl;
     std::cout << "\n*============================*" << endl;
 }
 
@@ -223,6 +223,11 @@ void checkoutOrder(const User& user) {
                     std::cout << "Received money is $" << change << " short\n";
                     std::cout << "Place amount of cash: ";
                     cin >> money;
+
+                    if (money > orderamount) {
+                        change = money - orderamount;
+                        std::cout << "Change: $" << change << endl;
+                    }
                 } while (money <= orderamount);
             }
         }
@@ -233,6 +238,19 @@ void checkoutOrder(const User& user) {
 
         std::cout << "\nThank you for ordering at LunchBytes!\n";
         std::cout << "Please take your receipt.\n";
+
+        string take;
+        do {
+            std::cout << "\nInput TAKE to confirm: ";
+            cin >> take;
+
+            if (take == "Take" || take == "take") {
+                std::cout << "Please type TAKE in all capital letters." << endl;
+            }
+        } while (take != "TAKE");
+
+        system(CLEAR);
+        viewBill();
         std::cout << "\nExiting...\n";
         Sleep(3000);
     }
@@ -250,7 +268,7 @@ void editBill() {
         cout << "\nIf you wish to reduce your order,\nPlease choose an option:\n";
         for (int x = 0; x < 5; x++) {
             if (ord.quantity[x] != 0) {
-                cout << x + 1 << ". " << ord.quantity[x] << " = " << ord.item[x] << " - $" << ord.price[x] << " each\n";
+                cout << x + 1 << ". " << ord.item[x] << " - $" << ord.price[x] << " each, " << ord.quantity[x] << " orders total: $" << ord.quantity[x]*ord.price[x] << "\n";
             }
         }
         cout << "0. Exit\n";
@@ -332,7 +350,7 @@ void userMenu(const User& user) {
             break;
         case 3:
             checkoutOrder(user);
-            choice = 0;
+            if (paidOrder) { choice = 0; }
             break;
         case 0:
             std::cout << "Exiting...\n";
