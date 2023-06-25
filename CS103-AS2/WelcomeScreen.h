@@ -7,5 +7,7 @@ void userRegNav();
 void adminMenuNav();
 void adminMenuURecords();
 void adminMenuModifyNav();
+void adminMenuModifyOrder();
+void adminMenuDeleteOrder();
 void orderMenuNav();
 void adminMenuOrders();

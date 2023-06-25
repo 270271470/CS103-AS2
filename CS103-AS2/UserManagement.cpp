@@ -106,7 +106,7 @@ void registerUser() {
 
     cout << endl;
 
-    cout << "Are you a Teacher or Student?: ";
+    cout << "Are you a Teacher (T) or Student (S) ?: ";
     cin >> newUser.role;
 
     ofstream file("userdb.csv", ios_base::app);

@@ -145,6 +145,7 @@ void deleteUser() {
             << user.role << "\n";
     }
 }
+
 void viewOrders() {
 
     system(CLEAR);
@@ -160,6 +161,106 @@ void viewOrders() {
         cout << line << "\n";
     }
     setConsoleColor(1 | 3);
+}
+
+void modifyOrder() {
+
+    system(CLEAR);
+    // Display Admin Welcome Screen
+    adminMenuModifyOrder();
+
+    string id;
+    cout << endl;
+    cout << "Enter Order ID To Modify: ";
+    cin >> id;
+
+    vector<Order> orders;
+    ifstream file("orderdb.csv");
+    string line;
+    while (getline(file, line)) {
+        vector<string> fields = split(line, ',');
+        if (fields[0] == id) {
+
+            Order order;
+            order.orderID = fields[0];
+            order.userID = fields[1];
+            order.firstName = fields[2];
+            order.lastName = fields[3];
+            order.role = fields[4];
+            cout << endl;
+            cout << "Modifying Order ID " << fields[0] << " For " << fields[2] << " " << fields[3] << " (User ID " << fields[1] << ")" << endl;
+            cout << endl;
+            cout << "New Food Item (Current is " << fields[5] << "): ";
+            cin >> order.foodItem;
+            cout << "New Price For Food Item (Current is $ " << fields[6] << "): ";
+            cin >> order.itemPrice;
+            cout << "New Quantity of Items (Current is " << fields[7] << "): ";
+            cin >> order.itemQnty;
+            cout << "New Total Price (Current is $ " << fields[8] << "): ";
+            cin >> order.totalPrice;
+            orders.push_back(order);
+        }
+        else {
+            Order order = { fields[0], fields[1], fields[2], fields[3], fields[4], fields[5], fields[6], fields[7], fields[8] };
+            orders.push_back(order);
+        }
+    }
+
+    ofstream fileOut("orderdb.csv");
+    for (const auto& order : orders) {
+        fileOut << order.orderID << ","
+            << order.userID << ","
+            << order.firstName << ","
+            << order.lastName << ","
+            << order.role << ","
+            << order.foodItem << ","
+            << order.itemPrice << ","
+            << order.itemQnty << ","
+            << order.totalPrice << "\n";
+    }
+}
+
+void deleteOrder() {
+
+    system(CLEAR);
+    // Display Admin Welcome Screen
+    adminMenuDeleteOrder();
+
+    cout << endl;
+    string id;
+    cout << "Order ID to Delete: ";
+    cin >> id;
+
+    vector<Order> orders;
+    ifstream file("orderdb.csv");
+    string line;
+    while (getline(file, line)) {
+        vector<string> fields = split(line, ',');
+        if (fields[0] != id) {
+            Order order = { fields[0], fields[1], fields[2], fields[3], fields[4], fields[5], fields[6], fields[7], fields[8] };
+            orders.push_back(order);
+        }
+    }
+
+    ofstream fileOut("orderdb.csv");
+    for (const auto& order : orders) {
+        fileOut << order.orderID << ","
+            << order.userID << ","
+            << order.firstName << ","
+            << order.lastName << ","
+            << order.role << ","
+            << order.foodItem << ","
+            << order.itemPrice << ","
+            << order.itemQnty << ","
+            << order.totalPrice << "\n";
+    }
+
+    cout << endl;
+    setConsoleColor(FOREGROUND_RED | BACKGROUND_BLUE | BACKGROUND_GREEN | BACKGROUND_RED);
+    cout << "Order was successfully deleted.";
+    setConsoleColor(1 | 3);
+    cout << endl;
+    Sleep(2500);
 }
 
 void adminMenu() {
@@ -213,10 +314,10 @@ void adminMenu() {
             viewOrders();
             break;
         case 6:
-            deleteUser();
+            modifyOrder();
             break;
         case 7:
-            deleteUser();
+            deleteOrder();
             break;
         default:
             cout << "Invalid option!\n";
