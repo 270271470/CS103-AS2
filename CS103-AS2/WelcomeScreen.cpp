@@ -197,6 +197,44 @@ void adminMenuModifyNav() {
     setConsoleColor(1 | 3);
 }
 
+// Function - Admin Menu Modify Order
+void adminMenuModifyOrder() {
+    cout << R"( _                          _      ____          _             
+| |                        | |    |  _ \        | |            
+| |     _   _  _ __    ___ | |__  | |_) | _   _ | |_  ___  ___ 
+| |    | | | || '_ \  / __|| '_ \ |  _ < | | | || __|/ _ \/ __|
+| |____| |_| || | | || (__ | | | || |_) || |_| || |_|  __/\__ \
+|______|\__,_||_| |_| \___||_| |_||____/  \__, | \__|\___||___/
+                                           __/ |               
+                                          |___/)";
+    cout << endl;
+    setConsoleColor(0 | BACKGROUND_GREEN | BACKGROUND_BLUE);
+    cout << R"(================================================================
+=          ADMIN MENU - UPDATE ORDER INFORMATION               =
+================================================================
+)";
+    setConsoleColor(1 | 3);
+}
+
+// Function - Admin Menu Delete Order
+void adminMenuDeleteOrder() {
+    cout << R"( _                          _      ____          _             
+| |                        | |    |  _ \        | |            
+| |     _   _  _ __    ___ | |__  | |_) | _   _ | |_  ___  ___ 
+| |    | | | || '_ \  / __|| '_ \ |  _ < | | | || __|/ _ \/ __|
+| |____| |_| || | | || (__ | | | || |_) || |_| || |_|  __/\__ \
+|______|\__,_||_| |_| \___||_| |_||____/  \__, | \__|\___||___/
+                                           __/ |               
+                                          |___/)";
+    cout << endl;
+    setConsoleColor(0 | BACKGROUND_GREEN | BACKGROUND_BLUE);
+    cout << R"(================================================================
+=                   ADMIN MENU - DELETE AN ORDER               =
+================================================================
+)";
+    setConsoleColor(1 | 3);
+}
+
 // Function - Order Menu Nav
 void orderMenuNav() {
 cout << R"( _                          _      ____          _             
