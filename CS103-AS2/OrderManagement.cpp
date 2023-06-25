@@ -22,13 +22,68 @@ struct order {
     int quantity[5] = { 0,0,0,0,0 };
 }; //order placed in array, along with prices and quantity. The idea is that if the order item is 0, it won't be added to the list
 
+struct discount {
+    string code[5] = { "chrispbacn","tentickles","tacoboutit","iamonaroll" };
+    bool used[5] = { 0,0,0,0 };
+    int damount[5] = { 5,10,20,25 };
+}; // discount
+
 order ord;
+discount dis;
 int orderamount = 0; //sum of the order
+int discountnumber;
+bool discounton = false;
 
 bool existingOrder = false; //to check if there is a current order
 bool paidOrder = false; //to check if previous order was already paid. If that was the case the bill should be reset and there should be no existing order
 
 std::fstream orderFile("orderdb.csv", std::ios::in | std::ios::out | std::ios::app);
+
+void discountapplied() {
+    if (dis.used[discountnumber]) {
+        std::cout << "\n*============================*\n" << endl;
+        std::cout << "Discount applied: " << dis.code[discountnumber] << " - $" << dis.damount[discountnumber] << " off" << endl;
+    }
+}
+
+void discountcode(const User& user) {
+    string discode;
+
+    cout << "Please enter your discount code: ";
+    std::cin >> discode;
+
+    for (int x = 0; x < 5; x++) {
+        if (discode == dis.code[x]) {
+            if (dis.used[x] == 0) {
+                if (dis.damount[x] <= orderamount) {
+                    orderamount -= dis.damount[x];
+                    dis.used[x] = 1;
+                    discountnumber = x;
+
+                    discounton = true;
+
+                    cout << "Discount applied.\nRefreshing...\n";
+                    Sleep(3000);
+                    break;
+                }
+                else {
+                    cout << "Discount amount shoudld be less than or equal to total amount." << endl;
+                    Sleep(2000);
+                    break;
+                }
+            }
+            else {
+                cout << "Discount code has already been used.\n";
+                Sleep(2000);
+                break;
+            }
+        }
+    }
+    if (discode != dis.code[0] && discode != dis.code[1] && discode != dis.code[2] && discode != dis.code[3] && discode != dis.code[0]) {
+        std::cout << "Not a valid discount code." << endl;
+        Sleep(2000);
+    }
+}
 
 void viewBill() {
 
@@ -44,6 +99,8 @@ void viewBill() {
             std::cout << ord.item[x] << " - $" << ord.price[x] << " each = " << ord.quantity[x] << " orders total: $" << ord.quantity[x]*ord.price[x] << endl;
         }
     }
+    discountapplied();
+    std::cout << "\n*============================*\n" << endl;
     std::cout << "Total Amount: $" << orderamount << endl;
     std::cout << "\n*============================*" << endl;
 }
@@ -52,6 +109,8 @@ void resetbill() {
     for (int x = 0; x < 5; x++) {
         ord.quantity[x] = 0;
         orderamount = 0;
+        dis.used[x] = 0;
+        discounton = false;
     }
 }
 
@@ -116,7 +175,7 @@ void orderLunch(const User& user) {
         std::cout << "2. No\n";
         cout << "================================================================" << endl;
         std::cout << "Enter your input here: ";
-        cin >> choiceOrder;
+        std::cin >> choiceOrder;
 
         if (choiceOrder == 1) {
             resetbill();
@@ -125,6 +184,7 @@ void orderLunch(const User& user) {
 
     do {
         system(CLEAR);
+        orderMenuNav();
         viewBill();
 
         std::cout << "\nPlease choose an option:\n";
@@ -135,10 +195,10 @@ void orderLunch(const User& user) {
 
         std::cout << "=================================\n";
         std::cout << "Enter your choice here: ";
-        cin >> choice;
+        std::cin >> choice;
         if (choice != 0) {
             std::cout << "Enter quantity of item here: ";
-            cin >> amount;
+            std::cin >> amount;
         }
 
         switch (choice) {
@@ -180,80 +240,93 @@ void checkoutOrder(const User& user) {
     int choice;
     int change;
 
-    system(CLEAR);
-    viewBill();
-    std::cout << "Choose Payment Method:\n";
-    std::cout << "1. Card\n";
-    std::cout << "2. Cash\n";
-    std::cout << "0. Back\n";
-    std::cout << "Enter your choice here: ";
-    cin >> choice;
-
-    system(CLEAR);
-    viewBill();
-    if (choice == 1) {
-        string confirm;
-
-        std::cout << "Payment Method: Card\n";
-        do {
-            std::cout << "\nInput CARD to confirm: ";
-            cin >> confirm;
-
-            if (confirm == "Card" || confirm == "card") {
-                std::cout << "Please type CARD in all capital letters." << endl;
-            }
-        } while (confirm != "CARD");
-        paidOrder = true;
-
-    }
-    else if (choice == 2) {
-        std::cout << "Payment Method: Cash\n";
-        std::cout << "Place amount of cash: ";
-        cin >> money;
-        if (money != orderamount) {
-            if (money > orderamount) {
-                change = money - orderamount;
-                std::cout << "Change: $" << change << endl;
-            }
-            else if (money < orderamount) {
-                do {
-
-                    change = orderamount - money;
-
-                    std::cout << "Received money is $" << change << " short\n";
-                    std::cout << "Place amount of cash: ";
-                    cin >> money;
-
-                    if (money > orderamount) {
-                        change = money - orderamount;
-                        std::cout << "Change: $" << change << endl;
-                    }
-                } while (money <= orderamount);
-            }
+    do {
+        system(CLEAR);
+        orderMenuNav();
+        viewBill();
+        std::cout << "Choose Payment Method:\n";
+        std::cout << "1. Card\n";
+        std::cout << "2. Cash\n";
+        if (discounton == false) {
+            std::cout << "3. Input Discount\n";
         }
-        paidOrder = true;
-    }
-    if (paidOrder) {
-        printBill(user);
-
-        std::cout << "\nThank you for ordering at LunchBytes!\n";
-        std::cout << "Please take your receipt.\n";
-
-        string take;
-        do {
-            std::cout << "\nInput TAKE to confirm: ";
-            cin >> take;
-
-            if (take == "Take" || take == "take") {
-                std::cout << "Please type TAKE in all capital letters." << endl;
-            }
-        } while (take != "TAKE");
+        std::cout << "0. Back\n";
+        std::cout << "Enter your choice here: ";
+        std::cin >> choice;
 
         system(CLEAR);
+        orderMenuNav();
         viewBill();
-        std::cout << "\nExiting...\n";
-        Sleep(3000);
-    }
+        if (choice == 1) {
+            string confirm;
+
+            std::cout << "Payment Method: Card\n";
+            do {
+                std::cout << "\nInput CARD to confirm: ";
+                std::cin >> confirm;
+
+                if (confirm == "Card" || confirm == "card") {
+                    std::cout << "Please type CARD in all capital letters." << endl;
+                }
+            } while (confirm != "CARD");
+            paidOrder = true;
+
+        }
+        else if (choice == 2) {
+            std::cout << "Payment Method: Cash\n";
+            std::cout << "Place amount of cash: ";
+            std::cin >> money;
+            if (money != orderamount) {
+                if (money > orderamount) {
+                    change = money - orderamount;
+                    std::cout << "Change: $" << change << endl;
+                }
+                else if (money < orderamount) {
+                    do {
+
+                        change = orderamount - money;
+
+                        std::cout << "Received money is $" << change << " short\n";
+                        std::cout << "Place amount of cash: ";
+                        std::cin >> money;
+
+                        if (money > orderamount) {
+                            change = money - orderamount;
+                            std::cout << "Change: $" << change << endl;
+                        }
+                    } while (money <= orderamount);
+                }
+            }
+            paidOrder = true;
+        }
+        else if (choice == 3) {
+            if ((discounton == false) && (orderamount > 0)) {
+                discountcode(user);
+            }
+        }
+        if (paidOrder) {
+            printBill(user);
+
+            std::cout << "\nThank you for ordering at LunchBytes!\n";
+            std::cout << "Please take your receipt.\n";
+
+            string take;
+            do {
+                std::cout << "\nInput TAKE to confirm: ";
+                std::cin >> take;
+
+                if (take == "Take" || take == "take") {
+                    std::cout << "Please type TAKE in all capital letters." << endl;
+                }
+            } while (take != "TAKE");
+
+            system(CLEAR);
+            viewBill();
+            std::cout << "\nExiting...\n";
+            Sleep(3000);
+        }
+    } while ((choice != 0) && (paidOrder == false));
+    
 }
 
 void editBill() {
@@ -262,6 +335,7 @@ void editBill() {
 
     do {
         system(CLEAR);
+        orderMenuNav();
         viewBill();
         Sleep(1000);
 
@@ -275,10 +349,10 @@ void editBill() {
 
         std::cout << "=================================\n";
         std::cout << "Enter your choice here: ";
-        cin >> choice;
+        std::cin >> choice;
         if (choice != 0) {
             std::cout << "Enter quantity to reduce: ";
-            cin >> amount;
+            std::cin >> amount;
         }
 
             switch (choice) {
@@ -336,7 +410,7 @@ void userMenu(const User& user) {
 
         cout << "==========================" << endl;
         cout << "Enter Your Selection: ";
-        cin >> choice;
+        std::cin >> choice;
 
         switch (choice) {
         case 1:
