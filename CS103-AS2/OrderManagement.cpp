@@ -63,25 +63,25 @@ void discountcode(const User& user) {
                     discounton = true;
 
                     cout << "Discount applied.\nRefreshing...\n";
-                    Sleep(3000);
+                    Sleep(2000);
                     break;
                 }
                 else {
                     cout << "Discount amount shoudld be less than or equal to total amount." << endl;
-                    Sleep(2000);
+                    Sleep(1000);
                     break;
                 }
             }
             else {
                 cout << "Discount code has already been used.\n";
-                Sleep(2000);
+                Sleep(1000);
                 break;
             }
         }
     }
     if (discode != dis.code[0] && discode != dis.code[1] && discode != dis.code[2] && discode != dis.code[3] && discode != dis.code[0]) {
         std::cout << "Not a valid discount code." << endl;
-        Sleep(2000);
+        Sleep(1000);
     }
 }
 
@@ -109,7 +109,6 @@ void resetbill() {
     for (int x = 0; x < 5; x++) {
         ord.quantity[x] = 0;
         orderamount = 0;
-        dis.used[x] = 0;
         discounton = false;
     }
 }
@@ -191,7 +190,7 @@ void orderLunch(const User& user) {
         for (int x = 0; x < 5; x++) {
             std::cout << x + 1 << ". " << ord.item[x] << " ($" << ord.price[x] << ")" << endl;
         }
-        std::cout << "0. End Order\n";
+        std::cout << "\n0. End Order\n";
 
         std::cout << "=================================\n";
         std::cout << "Enter your choice here: ";
@@ -250,7 +249,7 @@ void checkoutOrder(const User& user) {
         if (discounton == false) {
             std::cout << "3. Input Discount\n";
         }
-        std::cout << "0. Back\n";
+        std::cout << "\n0. Back\n";
         std::cout << "Enter your choice here: ";
         std::cin >> choice;
 
@@ -345,7 +344,7 @@ void editBill() {
                 cout << x + 1 << ". " << ord.item[x] << " - $" << ord.price[x] << " each, " << ord.quantity[x] << " orders total: $" << ord.quantity[x]*ord.price[x] << "\n";
             }
         }
-        cout << "0. Exit\n";
+        cout << "\n0. Exit\n";
 
         std::cout << "=================================\n";
         std::cout << "Enter your choice here: ";
@@ -406,7 +405,7 @@ void userMenu(const User& user) {
         std::cout << "1. Order Lunch\n";
         std::cout << "2. View Bill / Edit Bill\n";
         std::cout << "3. Checkout Order\n";
-        std::cout << "0. Exit\n";
+        std::cout << "\n0. Exit\n";
 
         cout << "==========================" << endl;
         cout << "Enter Your Selection: ";
