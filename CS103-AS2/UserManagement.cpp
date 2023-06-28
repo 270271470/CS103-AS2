@@ -44,7 +44,7 @@ string getPasswordInput() {
     return password;
 }
 
-// Function - Takes input from password and generates encrypted string.
+// Encryption Function -  We shift the current character 3 positions forward in the alphabet (Caesar cipher).
 string encryptPassword(const string& password) {
     string encrypted = "";
     for (char c : password) {
@@ -55,7 +55,7 @@ string encryptPassword(const string& password) {
     return encrypted;
 }
 
-// Function - Takes input from password and reverse encrypted string.
+// Decryption Function - Does the opposite of the above. Shift the characters 3 possitions backward in the alphabet to get to the original password.
 string decryptPassword(const string& password) {
     string decrypted = "";
     for (char c : password) {
@@ -116,6 +116,7 @@ void registerUser() {
         << newUser.password << ","
         << newUser.role << "\n";
 
+    cout << endl;
     cout << "Registration Successful. Redirecting To Main Menu...";
     Sleep(2500);
 }

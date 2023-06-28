@@ -56,14 +56,14 @@ cout << R"(===============================================================
 
 void displayWelcome() {
         displayWelcomeTo();
-        Sleep(1000);
+        Sleep(500);
         displayLunchBytes();
-        Sleep(1000);
+        Sleep(500);
         displayInitSystem();
         Sleep(1000);
 }
 
-// Function to display User Welcome Screen
+// Function to display main nav menu 
 void mainMenuNav() {
     
     setConsoleColor(1 | 3);
