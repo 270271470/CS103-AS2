@@ -2,9 +2,9 @@
 
 Read Me 
 
-User Guide for the Interactive School System 
+User Guide for the School Lunch Ordering System
 
-Welcome to our Interactive School System. This guide will assist you in navigating and operating the program. 
+Welcome to our School Lunch Ordering System. This guide will assist you in navigating and operating the program. 
 
 Getting Started 
 Before running the program, please make sure that your system meets the following requirements: 
